@@ -11,7 +11,7 @@ export default observer(function CarsList() {
 
     useEffect(() => {
         loadCars();
-    }, [cars])
+    }, [loadCars])
 
     return (
         <Container style={{ marginTop: "100px" }}>

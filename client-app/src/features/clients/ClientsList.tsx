@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite';
-import { Container, List } from 'semantic-ui-react';
+import {List } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 import ClientListItem from './ClientsListItem';
 
@@ -14,12 +14,10 @@ export default observer(function ClientsList() {
     }, [loadClients])
 
     return (
-        <Container style={{ marginTop: "100px" }}>
-            <List>
-                {clients.map(client => (
-                    <ClientListItem key={client.id} client={client} />
-                ))}
-            </List>
-        </Container>
+        <List>
+            {clients.map(client => (
+                <ClientListItem key={client.id} client={client} />
+            ))}
+        </List>
     )
 })

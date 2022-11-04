@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Icon, Item } from 'semantic-ui-react';
 import { Car } from '../../app/models/car';
 
@@ -13,8 +14,8 @@ export default function CarsListItem({ car }: Props) {
             <Item>
                 <Item.Content>
                     <Item.Header fixed='left'>
-                        <Icon name='car' style={{ marginLeft: '20px' }} />
-                        {car.brand}  {car.model}
+                        <Icon name='car'/>
+                        <Link to={'/cars/' + car.id}>{car.brand}  {car.model}</Link>
                     </Item.Header>
                     <Item.Meta>
                         {car.year}
@@ -25,7 +26,7 @@ export default function CarsListItem({ car }: Props) {
                         Description
                     </Item.Description>
                     <Item.Extra>
-                        Owner
+                        {car.client!.firstName + ' ' + car.client!.lastName}
                     </Item.Extra>
                 </Item.Content>
             </Item>
