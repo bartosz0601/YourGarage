@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
 import { addAbortSignal } from "stream";
+import { v4 as uuid } from 'uuid';
 
 export default class ClientStore {
 
@@ -43,6 +44,7 @@ export default class ClientStore {
                 result.map(x => {
                     this.clientsRegister.set(x.id, x);
                 })
+                this.setFormClient(false);
             })
         } catch (error) {
             console.log(error);
@@ -62,6 +64,7 @@ export default class ClientStore {
 
     updateClient = async (client: ClientFormValues) => {
         try {
+            client.id = uuid();
             await agent.Clients.update(client);
             runInAction(() => {
                 this.clientsRegister.set(client.id!, client as Client);

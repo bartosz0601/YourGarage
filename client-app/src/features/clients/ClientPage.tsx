@@ -2,17 +2,16 @@ import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite';
 import { Button, Container, Icon, List } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
-import ClientListItem from './ClientsListItem';
 import ClientForm from './ClientForm';
+import ClientsList from './ClientsList';
 
 export default observer(function ClientPage() {
 
     const { clientStore } = useStore();
-    const { loadClients, clients, setFormClient, formClientState } = clientStore
+    const { loadClients, setFormClient, formClientState } = clientStore
 
     useEffect(() => {
         loadClients();
-        clientStore.setFormClient(false);
     }, [loadClients])
 
     return (
@@ -28,11 +27,7 @@ export default observer(function ClientPage() {
 
             {formClientState && <ClientForm />}
 
-            <List>
-                {clients.map(client => (
-                    <ClientListItem key={client.id} client={client} />
-                ))}
-            </List>
+            <ClientsList />
         </Container>
     )
 })

@@ -14,7 +14,8 @@ export default function MySelectInput(props: Props) {
     return (
         <Form.Field error={meta.touched && !!meta.error}>
             <label>{props.label}</label>
-            <Select class="ui search dropdown"
+            <Select 
+                search
                 clearable
                 options={props.options}
                 value={field.value || null}

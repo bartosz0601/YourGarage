@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Icon, Item } from 'semantic-ui-react';
@@ -8,7 +9,7 @@ interface Props {
     client: Client
 }
 
-export default function ClientListItem({ client }: Props) {
+export default observer(function ClientListItem({ client }: Props) {
 
     const { clientStore: { setEditingClient, formClientState, deleteClient } } = useStore();
 
@@ -34,7 +35,7 @@ export default function ClientListItem({ client }: Props) {
                             <NavLink key={c.id} to={'/cars/' + c.id}>{c.brand + ' ' + c.model + ' ' + c.year}</NavLink>
                         ))}
                     </Item.Extra>
-                    <Button floated='right' color='red'
+                    <Button floated='right' color='red' disabled={formClientState}
                         onClick={() => deleteClient(client.id)}>
                         Delete
                     </Button>
@@ -47,4 +48,4 @@ export default function ClientListItem({ client }: Props) {
 
         </Item.Group>
     )
-}
+})

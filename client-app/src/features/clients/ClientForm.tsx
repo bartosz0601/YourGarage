@@ -2,10 +2,8 @@
 import React from "react";
 import { Button, Header, Segment } from "semantic-ui-react";
 import * as Yup from 'yup';
-import { Client, ClientFormValues } from "../../app/models/client";
-import { v4 as uuid } from 'uuid';
+import { ClientFormValues } from "../../app/models/client";
 import { useStore } from "../../app/stores/store";
-import { Link, useNavigate } from "react-router-dom";
 import { Form, Formik } from "formik";
 import MyTextInput from "../../common/form/MyTextInput";
 import MyTextArea from "../../common/form/MyTextArea";
@@ -14,7 +12,7 @@ import { observer } from 'mobx-react-lite';
 export default observer( function ClientForm() {
 
     const { clientStore } = useStore();
-    const { setFormClient, editingClient } = clientStore;
+    const { setFormClient, editingClient, updateClient, createClient } = clientStore;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
     const validationSchema = Yup.object({
@@ -27,10 +25,9 @@ export default observer( function ClientForm() {
 
     function handleFormSubmit(client: ClientFormValues) {
         if (client.id) {
-            clientStore.updateClient(client).then(() => setFormClient(false));
+            updateClient(client).then(() => setFormClient(false));
         } else {
-            client.id = uuid();
-            clientStore.createClient(client).then(() => setFormClient(false));
+            createClient(client).then(() => setFormClient(false));
         }
     }
 
@@ -38,16 +35,16 @@ export default observer( function ClientForm() {
         <Segment clearing>
             {editingClient.id ? <Header>Client edit</Header> : <Header>Client create</Header>}
             <Formik
-                initialValues={editingClient!}
+                initialValues={editingClient}
                 validationSchema={validationSchema}
                 onSubmit={values => handleFormSubmit(values)}>
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <MyTextInput name='firstName' placeholder='First name' />
-                        <MyTextInput name='lastName' placeholder='Last name' />
-                        <MyTextInput name='email' placeholder='Email' />
-                        <MyTextInput name='phone' placeholder='Phone' />
-                        <MyTextArea rows={3} placeholder='Details' name='details' />
+                        <MyTextInput name='firstName' placeholder='First name' label='First name' />
+                        <MyTextInput name='lastName' placeholder='Last name' label='Last name' />
+                        <MyTextInput name='email' placeholder='example@example.pl' label='Email address' />
+                        <MyTextInput name='phone' placeholder='xxxxxxxxx' label='Phone number'/>
+                        <MyTextArea rows={3} placeholder='Details' name='details' label="Details" />
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={isSubmitting} floated='right' positive type='submit' content='Submit' />

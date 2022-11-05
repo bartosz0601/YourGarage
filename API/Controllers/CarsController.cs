@@ -34,10 +34,16 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Create(Guid id, [FromBody] Car car)
+        public async Task<IActionResult> Edit(Guid id, [FromBody] Car car)
         {
             car.Id = id;
-            return HandleResult(await Mediator.Send(new Create.Command { Car = car }));
+            return HandleResult(await Mediator.Send(new Edit.Command { Car = car }));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
     }
 }

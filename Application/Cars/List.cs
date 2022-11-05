@@ -20,7 +20,7 @@ namespace Application.Cars
             }
             public async Task<Result<List<Car>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var cars = await _context.Cars.Include(c => c.Client).OrderBy(c => c.Brand).ToListAsync();
+                var cars = await _context.Cars.OrderBy(c => c.Brand).ToListAsync();
                 return Result<List<Car>>.Success(cars);
             }
         }

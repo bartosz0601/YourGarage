@@ -1,20 +1,25 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Item } from 'semantic-ui-react';
+import { Button, Icon, Item } from 'semantic-ui-react';
 import { Car } from '../../app/models/car';
+import { useStore } from '../../app/stores/store';
 
 interface Props {
     car: Car
+    clientName: string;
 }
 
-export default function CarsListItem({ car }: Props) {
+export default observer(function CarsListItem({ car, clientName }: Props) {
+
+    const { carStore: { setEditingCar, formCarState, deleteCar } } = useStore();
 
     return (
         <Item.Group>
             <Item>
                 <Item.Content>
                     <Item.Header fixed='left'>
-                        <Icon name='car'/>
+                        <Icon name='car' />
                         <Link to={'/cars/' + car.id}>{car.brand}  {car.model}</Link>
                     </Item.Header>
                     <Item.Meta>
@@ -26,10 +31,18 @@ export default function CarsListItem({ car }: Props) {
                         Description
                     </Item.Description>
                     <Item.Extra>
-                        {car.client!.firstName + ' ' + car.client!.lastName}
+                        {clientName}
                     </Item.Extra>
+                    <Button floated='right' color='red' disabled={formCarState}
+                        onClick={() => deleteCar(car.id)}>
+                        Delete
+                    </Button>
+                    <Button floated='right' color='green' disabled={formCarState}
+                        onClick={() => setEditingCar(car.id)}>
+                        Edit
+                    </Button>
                 </Item.Content>
             </Item>
         </Item.Group>
     )
-}
+})

@@ -7,19 +7,13 @@ import CarsListItem from './CarsListItem';
 export default observer(function CarsList() {
 
     const { carStore } = useStore();
-    const { loadCars, cars } = carStore
-
-    useEffect(() => {
-        loadCars();
-    }, [loadCars])
+    const { cars, getClientName } = carStore
 
     return (
-        <Container style={{ marginTop: "100px" }}>
-            <List>
-                {cars.map(car => (
-                    <CarsListItem key={car.id} car={car} />
-                ))}
-            </List>
-        </Container>
+        <List>
+            {cars.map(car =>
+                <CarsListItem key={car.id} car={car} clientName={getClientName(car.clientId)} />
+            )}
+        </List>
     )
 })

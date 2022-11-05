@@ -17,7 +17,7 @@ export class CarFormValues {
     id?: string = undefined;
     brand: string = '';
     model: string = '';
-    year: number = 2000;
+    year: number = 0;
     vin: string = '';
     clientId: string = '';
 

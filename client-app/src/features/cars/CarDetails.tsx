@@ -12,7 +12,7 @@ export default observer(function CarDetails() {
 
     useEffect(() => {
         loadCar(id!);
-    }, [car])
+    }, [id])
 
     return (
         <>

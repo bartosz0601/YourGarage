@@ -1,4 +1,5 @@
-﻿using Application.Sevices;
+﻿using Application.Clients;
+using Application.Sevices;
 using AutoMapper;
 using Domain;
 
@@ -9,6 +10,8 @@ namespace Application.Core
         public MappingProfiles()
         { 
             CreateMap<Client, Client>();
+            CreateMap<Client, ClientBasicDto>()
+                .ForMember(b => b.Name, c => c.MapFrom(c => c.FirstName + ' ' + c.LastName));
             CreateMap<Car, Car>();
             CreateMap<Service, Service>();
             CreateMap<Service, ServiceDto>()

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { Car } from '../models/car';
-import { Client, ClientFormValues } from '../models/client';
+import { Car, CarFormValues } from '../models/car';
+import { Client, ClientBasic, ClientFormValues } from '../models/client';
 import { Service } from '../models/service';
 
 
@@ -21,6 +21,7 @@ const Services = {
 
 const Clients = {
     list: () => requests.get<Client[]>('/clients'),
+    listBasic: () => requests.get<ClientBasic[]>('/clients/basic'),
     create: (client: ClientFormValues) => requests.post<void>('/clients/', client),
     update: (client: ClientFormValues) => requests.put<void>('/clients/' + client.id, client),
     delete: (id: string) => requests.del<void>('/clients/' + id)
@@ -28,7 +29,10 @@ const Clients = {
 
 const Cars = {
     list: () => requests.get<Car[]>('/cars'),
-    details: (id: string) => requests.get<Car>('/cars/' + id)
+    details: (id: string) => requests.get<Car>('/cars/' + id),
+    create: (car: CarFormValues) => requests.post<void>('/cars/', car),
+    update: (car: CarFormValues) => requests.put<void>('/cars/' + car.id, car),
+    delete: (id: string) => requests.del<void>('/cars/' + id),
 }
 
 const agent = {

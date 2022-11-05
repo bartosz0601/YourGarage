@@ -10,6 +10,11 @@ export interface Client {
     cars?: Car[];
 }
 
+export interface ClientBasic {
+    id: string;
+    name: string;
+}
+
 export class ClientFormValues { 
     id?: string = undefined;
     firstName: string = '';

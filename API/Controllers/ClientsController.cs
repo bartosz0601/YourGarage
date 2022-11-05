@@ -24,6 +24,12 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Query { }));
         }
 
+        [HttpGet("basic")]
+        public async Task<IActionResult> GetBasic()
+        {
+            return HandleResult(await Mediator.Send(new ListBasic.Query { }));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
