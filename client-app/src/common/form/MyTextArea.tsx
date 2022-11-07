@@ -7,12 +7,13 @@ interface Props {
     name: string;
     rows: number;
     label?: string; 
+    disabled?: boolean;
 }
 
 export default function MyTextArea(props: Props) {
     const [field, meta] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error}>
+        <Form.Field error={meta.touched && !!meta.error} disabled={props.disabled}>
             <label>{props.label}</label>
             <textarea {...field} {...props} />
             {meta.touched && meta.error ? (

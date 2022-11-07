@@ -11,8 +11,9 @@ import { dropDownOption } from '../../app/models/dropDownOption';
 
 export default observer(function CarForm() {
 
-    const { carStore } = useStore();
-    const { editingCar, setFormCar, updateCar, createCar, clientsNames } = carStore;
+    const { carStore, commonStore } = useStore();
+    const { editingCar, setFormCar, updateCar, createCar } = carStore;
+    const { clientsNamesOptions } = commonStore;
 
     const validationSchema = Yup.object({
         brand: Yup.string().required('The car brand is required'),
@@ -23,17 +24,11 @@ export default observer(function CarForm() {
     })
 
     let yearsOptions: dropDownOption<number>[] = [];
-    let clientsNamesOptions: dropDownOption<string>[] = [];
 
     //update years list
     for (let i = new Date().getFullYear(); i >= 1950; i--) {
         yearsOptions.push({ text: i.toString(), value: i });
     }
-
-    //update clients names list
-    clientsNames.forEach((cn => { 
-        clientsNamesOptions.push({ text: cn.name, value: cn.id })
-    }))
 
     function handleFormSubmit(car: CarFormValues) {
         if (car.id) {

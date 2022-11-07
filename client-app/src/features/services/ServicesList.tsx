@@ -7,19 +7,13 @@ import ServiceListItem from './ServiceListIem';
 export default observer(function ServicesList() {
 
     const { serviceStore } = useStore();
-    const { loadServices, services } = serviceStore
-
-    useEffect(() => {
-        loadServices();
-    }, [loadServices])
+    const { services } = serviceStore
 
     return (
-        <Container style={{ marginTop: "100px" }}>
-            <List>
-                {services.map(service => (
-                    <ServiceListItem key={service.id} service={service} />
-                ))}
-            </List>
-        </Container>
+        <List>
+            {services.map(service => (
+                <ServiceListItem key={service.id} service={service} />
+            ))}
+        </List>
     )
 })

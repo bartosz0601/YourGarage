@@ -11,7 +11,6 @@ export default class CarStore {
     car: Car | undefined;
     editingCar = new CarFormValues();
     formCarState = false;
-    clientsNames: ClientBasic[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -20,7 +19,6 @@ export default class CarStore {
     setEditingCar = (id: string) => {
         this.editingCar = this.cars.filter(c => c.id === id)[0] as CarFormValues;
         this.setFormCar(true);
-        console.log(this.editingCar);
     }
 
     setFormCar = (state: boolean) => {
@@ -30,9 +28,9 @@ export default class CarStore {
         this.formCarState = state;
     }
 
-    getClientName = (id: string) => {
-        if (this.clientsNames.some(c => c.id === id)) {
-            let client = this.clientsNames.filter(c => c.id === id)[0];
+    getClientName = (id: string, clientsNames: ClientBasic[]) => {
+        if (clientsNames.some(c => c.id === id)) {
+            let client = clientsNames.filter(c => c.id === id)[0];
             return client.name;
         } else {
             return ' ';
@@ -56,17 +54,6 @@ export default class CarStore {
             runInAction(() => {
                 this.cars = result;
                 this.setFormCar(false);
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    loadClientsName = async () => {
-        try {
-            const result = await agent.Clients.listBasic();
-            runInAction(() => {
-                this.clientsNames = result;
             })
         } catch (error) {
             console.log(error);

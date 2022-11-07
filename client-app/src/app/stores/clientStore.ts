@@ -1,8 +1,6 @@
-import { store } from "./store";
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
-import { addAbortSignal } from "stream";
 import { v4 as uuid } from 'uuid';
 
 export default class ClientStore {
@@ -41,7 +39,7 @@ export default class ClientStore {
         try {
             const result = await agent.Clients.list();
             runInAction(() => {
-                result.map(x => {
+                result.forEach(x => {
                     this.clientsRegister.set(x.id, x);
                 })
                 this.setFormClient(false);

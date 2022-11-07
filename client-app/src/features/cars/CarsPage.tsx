@@ -6,8 +6,9 @@ import CarForm from './CarForm';
 import { useStore } from '../../app/stores/store';
 
 export default observer( function CarsPage() {
-    const { carStore } = useStore();
-    const { loadCars, loadClientsName, formCarState, setFormCar } = carStore
+    const { carStore, commonStore } = useStore();
+    const { loadCars, formCarState, setFormCar } = carStore;
+    const { loadClientsName } = commonStore;
 
     useEffect(() => {
         loadClientsName();

@@ -6,13 +6,14 @@ import CarsListItem from './CarsListItem';
 
 export default observer(function CarsList() {
 
-    const { carStore } = useStore();
-    const { cars, getClientName } = carStore
+    const { carStore, commonStore } = useStore();
+    const { cars, getClientName  } = carStore;
+    const { clientsNames } = commonStore;
 
     return (
         <List>
             {cars.map(car =>
-                <CarsListItem key={car.id} car={car} clientName={getClientName(car.clientId)} />
+                <CarsListItem key={car.id} car={car} clientName={getClientName(car.clientId, clientsNames)} />
             )}
         </List>
     )

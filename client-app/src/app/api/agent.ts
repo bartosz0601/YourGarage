@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Car, CarFormValues } from '../models/car';
 import { Client, ClientBasic, ClientFormValues } from '../models/client';
-import { Service } from '../models/service';
+import { Service, ServiceFormValues } from '../models/service';
 
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -16,10 +16,14 @@ const requests = {
 }
 
 const Services = {
-    list: () => requests.get<Service[]>('/services')
+    list: () => requests.get<Service[]>('/services'),
+    create: (service: ServiceFormValues) => requests.post<Service>('/services/', service),
+    update: (service: ServiceFormValues) => requests.put<Service>('/services/' + service.id, service),
+    delete: (id: String) => requests.del<Service>('/services/' + id),
 }
 
 const Clients = {
+    get: (id: string) => requests.get<Client>('/clients/' + id),
     list: () => requests.get<Client[]>('/clients'),
     listBasic: () => requests.get<ClientBasic[]>('/clients/basic'),
     create: (client: ClientFormValues) => requests.post<void>('/clients/', client),

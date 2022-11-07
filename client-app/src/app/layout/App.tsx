@@ -5,7 +5,7 @@ import CarDetails from '../../features/cars/CarDetails';
 import CarsPage from '../../features/cars/CarsPage';
 import ClientPage from '../../features/clients/ClientPage';
 import HomePage from '../../features/home/HomePage';
-import ServicesList from '../../features/services/ServicesList';
+import ServicesPage from '../../features/services/ServicesPage';
 import NavBar from './NavBar';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
       <Container>
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/services' element={<ServicesList />} />
+          <Route path='/services' element={<ServicesPage />} />
           <Route path='/cars' element={<CarsPage />} />
           <Route path='/cars/:id' element={<CarDetails />} />
           <Route path='/clients' element={<ClientPage />} />

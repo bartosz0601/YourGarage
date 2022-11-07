@@ -2,12 +2,17 @@
 using AutoMapper;
 using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Application.Cars
+namespace Application.Services
 {
-    public class Delete {
+    public class Delete
+    {
         public class Command : IRequest<Result<Unit>>
         {
             public Guid Id;
@@ -22,14 +27,14 @@ namespace Application.Cars
             }
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var car = await _context.Cars.FindAsync(request.Id);
-                _context.Remove(car);
+                var service = await _context.Services.FindAsync(request.Id);
+                _context.Services.Remove(service);
                 var result = await _context.SaveChangesAsync() > 0;
                 if (result)
                 {
                     return Result<Unit>.Success(Unit.Value);
                 }
-                return Result<Unit>.Failure("Failed to remove car");
+                return Result<Unit>.Failure("Failed to remove service");
             }
         }
     }
