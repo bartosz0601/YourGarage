@@ -10,7 +10,6 @@ export default class CarStore {
     cars: Car[] = [];
     car: Car | undefined;
     editingCar = new CarFormValues();
-    formCarState = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -18,14 +17,10 @@ export default class CarStore {
 
     setEditingCar = (id: string) => {
         this.editingCar = this.cars.filter(c => c.id === id)[0] as CarFormValues;
-        this.setFormCar(true);
     }
 
-    setFormCar = (state: boolean) => {
-        if (!state) {
-            this.editingCar = new CarFormValues();
-        }
-        this.formCarState = state;
+    initFormCar = () => {
+        this.editingCar = new CarFormValues();
     }
 
     getClientName = (id: string, clientsNames: ClientBasic[]) => {
@@ -53,7 +48,6 @@ export default class CarStore {
             const result = await agent.Cars.list();
             runInAction(() => {
                 this.cars = result;
-                this.setFormCar(false);
             })
         } catch (error) {
             console.log(error);

@@ -6,8 +6,8 @@ import CarForm from './CarForm';
 import { useStore } from '../../app/stores/store';
 
 export default observer(function CarsPage() {
-    const { carStore, commonStore } = useStore();
-    const { loadCars, formCarState, setFormCar } = carStore;
+    const { carStore, commonStore, modalStore } = useStore();
+    const { loadCars, initFormCar } = carStore;
     const { loadClientsName } = commonStore;
 
     useEffect(() => {
@@ -23,24 +23,22 @@ export default observer(function CarsPage() {
             <Grid columns={2} padded>
                 <Grid.Row centered>
                     <Grid.Column width={2}>
-
-                        {!formCarState &&
-                            <Button animated='vertical' size='big' color='black' type='button'
-                                onClick={() => setFormCar(true)}>
-                                <Button.Content visible>Add</Button.Content>
-                                <Button.Content hidden>
-                                    <Icon name='plus square outline'></Icon>
-                                </Button.Content>
-                            </Button>}
-
-
+                        <Button animated='vertical' size='big' color='black' type='button'
+                            onClick={() => {
+                                initFormCar();
+                                modalStore.openModal(<CarForm/>)
+                            }}>
+                            <Button.Content visible>Add</Button.Content>
+                            <Button.Content hidden>
+                                <Icon name='plus square outline'></Icon>
+                            </Button.Content>
+                        </Button>
                     </Grid.Column>
                     <Grid.Column width={12}>
                         <CarsList />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-            {formCarState && <CarForm />}
         </Container>
     )
 })

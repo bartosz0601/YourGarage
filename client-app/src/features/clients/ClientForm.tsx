@@ -11,8 +11,8 @@ import { observer } from 'mobx-react-lite';
 
 export default observer( function ClientForm() {
 
-    const { clientStore } = useStore();
-    const { setFormClient, editingClient, updateClient, createClient } = clientStore;
+    const { clientStore, modalStore } = useStore();
+    const { editingClient, updateClient, createClient } = clientStore;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
     const validationSchema = Yup.object({
@@ -25,15 +25,15 @@ export default observer( function ClientForm() {
 
     function handleFormSubmit(client: ClientFormValues) {
         if (client.id) {
-            updateClient(client).then(() => setFormClient(false));
+            updateClient(client).then(() => modalStore.closeModal());
         } else {
-            createClient(client).then(() => setFormClient(false));
+            createClient(client).then(() => modalStore.closeModal());
         }
     }
 
     return (
         <Segment clearing>
-            {editingClient.id ? <Header>Client edit</Header> : <Header>Client create</Header>}
+            {editingClient.id ? <Header>Edit client</Header> : <Header>Create client</Header>}
             <Formik
                 initialValues={editingClient}
                 validationSchema={validationSchema}
@@ -48,7 +48,7 @@ export default observer( function ClientForm() {
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
-                        <Button floated='right' type='button' content='Cancel' onClick={() => setFormClient(false)} />
+                        <Button floated='right' type='button' content='Cancel' onClick={() => modalStore.closeModal()} />
                     </Form>
                 )}
             </Formik>

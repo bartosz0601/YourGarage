@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Icon, Item } from 'semantic-ui-react';
 import { Car } from '../../app/models/car';
 import { useStore } from '../../app/stores/store';
+import CarForm from './CarForm';
 
 interface Props {
     car: Car
@@ -13,7 +14,7 @@ interface Props {
 
 export default observer(function CarsListItem({ car, clientName, deleteHandle }: Props) {
 
-    const { carStore: { setEditingCar, formCarState } } = useStore();
+    const { carStore, modalStore} = useStore();
 
     return (
         <Item.Group>
@@ -29,17 +30,17 @@ export default observer(function CarsListItem({ car, clientName, deleteHandle }:
                         {car.vin}
                     </Item.Meta>
                     <Item.Description>
-                        Description
+                        <Icon name='user' /> {clientName}
                     </Item.Description>
-                    <Item.Extra>
-                        {clientName}
-                    </Item.Extra>
-                    <Button floated='right' color='red' disabled={formCarState}
+                    <Button floated='right' color='red'
                         onClick={() => deleteHandle(car.id)}>
                         Delete
                     </Button>
-                    <Button floated='right' color='blue' disabled={formCarState}
-                        onClick={() => setEditingCar(car.id)}>
+                    <Button floated='right' color='blue'
+                        onClick={() => {
+                            carStore.setEditingCar(car.id);
+                            modalStore.openModal(<CarForm />);
+                        }}>
                         Edit
                     </Button>
                 </Item.Content>

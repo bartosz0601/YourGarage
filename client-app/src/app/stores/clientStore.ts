@@ -2,11 +2,11 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
 import { v4 as uuid } from 'uuid';
+import ModalStore from './modalStore';
 
 export default class ClientStore {
 
     clientsRegister = new Map<string, Client>();
-    formClientState = false;
     editingClient = new ClientFormValues();
 
     constructor() {
@@ -25,14 +25,10 @@ export default class ClientStore {
 
     setEditingClient = (id: string) => {
         this.editingClient = this.clientsRegister.get(id)!;
-        this.setFormClient(true);
     }
 
-    setFormClient = (state: boolean) => {
-        if (!state) {
-            this.editingClient = new ClientFormValues();
-        }
-        this.formClientState = state;
+    initFormClient = () => {
+        this.editingClient = new ClientFormValues();
     }
 
     loadClients = async () => {
@@ -42,7 +38,6 @@ export default class ClientStore {
                 result.forEach(x => {
                     this.clientsRegister.set(x.id, x);
                 })
-                this.setFormClient(false);
             })
         } catch (error) {
             console.log(error);

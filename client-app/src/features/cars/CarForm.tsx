@@ -11,8 +11,8 @@ import { dropDownOption } from '../../app/models/dropDownOption';
 
 export default observer(function CarForm() {
 
-    const { carStore, commonStore } = useStore();
-    const { editingCar, setFormCar, updateCar, createCar } = carStore;
+    const { carStore, commonStore, modalStore} = useStore();
+    const { editingCar, updateCar, createCar } = carStore;
     const { clientsNamesOptions } = commonStore;
 
     const validationSchema = Yup.object({
@@ -32,9 +32,9 @@ export default observer(function CarForm() {
 
     function handleFormSubmit(car: CarFormValues) {
         if (car.id) {
-            updateCar(car).then(() => setFormCar(false));
+            updateCar(car).then(() => modalStore.closeModal());
         } else {
-            createCar(car).then(() => setFormCar(false));
+            createCar(car).then(() => modalStore.closeModal());
         }
     }
 
@@ -56,7 +56,7 @@ export default observer(function CarForm() {
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
                         <Button floated='right' type='button' content='Cancel'
-                            onClick={() => setFormCar(false)} />
+                            onClick={() => modalStore.closeModal()} />
                     </Form>
                 )}
             </Formik >

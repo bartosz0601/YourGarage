@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Button, Icon, Item } from 'semantic-ui-react';
 import { Client } from '../../app/models/client';
 import { useStore } from '../../app/stores/store';
+import ClientForm from './ClientForm';
 
 interface Props {
     client: Client
@@ -12,7 +13,7 @@ interface Props {
 
 export default observer(function ClientListItem({ client, deleteHandle }: Props) {
 
-    const { clientStore: { setEditingClient, formClientState, deleteClient } } = useStore();
+    const { clientStore, modalStore } = useStore();
 
     return (
         <Item.Group>
@@ -36,12 +37,15 @@ export default observer(function ClientListItem({ client, deleteHandle }: Props)
                             <NavLink key={c.id} to={'/cars/' + c.id}>{c.brand + ' ' + c.model + ' ' + c.year}</NavLink>
                         ))}
                     </Item.Extra>
-                    <Button floated='right' color='red' disabled={formClientState}
+                    <Button floated='right' color='red'
                         onClick={() => deleteHandle(client.id)}>
                         Delete
                     </Button>
-                    <Button floated='right' color='blue' disabled={formClientState}
-                        onClick={() => setEditingClient(client.id)}>
+                    <Button floated='right' color='blue'
+                        onClick={() => {
+                            clientStore.setEditingClient(client.id);
+                            modalStore.openModal(<ClientForm/>);
+                        }}>
                         Edit
                     </Button>
                 </Item.Content>
