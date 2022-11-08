@@ -3,7 +3,6 @@ import { Car, CarFormValues } from '../models/car';
 import { Client, ClientBasic, ClientFormValues } from '../models/client';
 import { Service, ServiceFormValues } from '../models/service';
 
-
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;

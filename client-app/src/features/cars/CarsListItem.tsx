@@ -7,12 +7,13 @@ import { useStore } from '../../app/stores/store';
 
 interface Props {
     car: Car
-    clientName: string;
+    clientName: string
+    deleteHandle: Function
 }
 
-export default observer(function CarsListItem({ car, clientName }: Props) {
+export default observer(function CarsListItem({ car, clientName, deleteHandle }: Props) {
 
-    const { carStore: { setEditingCar, formCarState, deleteCar } } = useStore();
+    const { carStore: { setEditingCar, formCarState } } = useStore();
 
     return (
         <Item.Group>
@@ -34,10 +35,10 @@ export default observer(function CarsListItem({ car, clientName }: Props) {
                         {clientName}
                     </Item.Extra>
                     <Button floated='right' color='red' disabled={formCarState}
-                        onClick={() => deleteCar(car.id)}>
+                        onClick={() => deleteHandle(car.id)}>
                         Delete
                     </Button>
-                    <Button floated='right' color='green' disabled={formCarState}
+                    <Button floated='right' color='blue' disabled={formCarState}
                         onClick={() => setEditingCar(car.id)}>
                         Edit
                     </Button>

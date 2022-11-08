@@ -7,9 +7,10 @@ import { useStore } from '../../app/stores/store';
 
 interface Props {
     client: Client
+    deleteHandle: Function
 }
 
-export default observer(function ClientListItem({ client }: Props) {
+export default observer(function ClientListItem({ client, deleteHandle }: Props) {
 
     const { clientStore: { setEditingClient, formClientState, deleteClient } } = useStore();
 
@@ -36,10 +37,10 @@ export default observer(function ClientListItem({ client }: Props) {
                         ))}
                     </Item.Extra>
                     <Button floated='right' color='red' disabled={formClientState}
-                        onClick={() => deleteClient(client.id)}>
+                        onClick={() => deleteHandle(client.id)}>
                         Delete
                     </Button>
-                    <Button floated='right' color='green' disabled={formClientState}
+                    <Button floated='right' color='blue' disabled={formClientState}
                         onClick={() => setEditingClient(client.id)}>
                         Edit
                     </Button>

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Container, Icon } from 'semantic-ui-react';
+import { Button, Container, Grid, Icon } from 'semantic-ui-react';
 import CarsList from './CarsList';
 import CarForm from './CarForm';
 import { useStore } from '../../app/stores/store';
 
-export default observer( function CarsPage() {
+export default observer(function CarsPage() {
     const { carStore, commonStore } = useStore();
     const { loadCars, formCarState, setFormCar } = carStore;
     const { loadClientsName } = commonStore;
@@ -20,18 +20,27 @@ export default observer( function CarsPage() {
 
     return (
         <Container style={{ marginTop: "100px" }}>
-            {!formCarState &&
-                <Button animated='vertical' size='big' color='black' type='button'
-                onClick={() => setFormCar(true)}>
-                <Button.Content visible>Add</Button.Content>
-                <Button.Content hidden>
-                    <Icon name='plus square outline'></Icon>
-                </Button.Content>
-            </Button>}
+            <Grid columns={2} padded>
+                <Grid.Row centered>
+                    <Grid.Column width={2}>
 
+                        {!formCarState &&
+                            <Button animated='vertical' size='big' color='black' type='button'
+                                onClick={() => setFormCar(true)}>
+                                <Button.Content visible>Add</Button.Content>
+                                <Button.Content hidden>
+                                    <Icon name='plus square outline'></Icon>
+                                </Button.Content>
+                            </Button>}
+
+
+                    </Grid.Column>
+                    <Grid.Column width={12}>
+                        <CarsList />
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
             {formCarState && <CarForm />}
-
-            <CarsList/>
         </Container>
     )
 })

@@ -7,13 +7,14 @@ import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 
 interface Props {
-    service: Service
+    service: Service,
+    deleteHandle: Function
 }
 
-export default observer(function ServiceListItem({ service }: Props) {
+export default observer(function ServiceListItem({ service, deleteHandle }: Props) {
 
-    const { serviceStore } = useStore();
-    const { formServiceState, setEditingService, deleteService } = serviceStore;
+    const { serviceStore, modalStore } = useStore();
+    const { formServiceState, setEditingService } = serviceStore;
 
     return (
         <Item.Group>
@@ -44,11 +45,11 @@ export default observer(function ServiceListItem({ service }: Props) {
                         </>
                     </Item.Extra>
                     <Button floated='right' color='red' disabled={formServiceState}
-                        onClick={() => deleteService(service.id)}
+                        onClick={() => deleteHandle(service.id)}
                     >
                         Delete
                     </Button>
-                    <Button floated='right' color='green' disabled={formServiceState}
+                    <Button floated='right' color='blue' disabled={formServiceState}
                         onClick={() => setEditingService(service.id)}>
                         Edit
                     </Button>

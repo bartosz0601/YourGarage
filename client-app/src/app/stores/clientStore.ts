@@ -51,6 +51,7 @@ export default class ClientStore {
 
     createClient = async (client: ClientFormValues) => {
         try {
+            client.id = uuid();
             await agent.Clients.create(client);
             runInAction(() => {
                 this.clientsRegister.set(client.id!, client as Client);
@@ -62,7 +63,6 @@ export default class ClientStore {
 
     updateClient = async (client: ClientFormValues) => {
         try {
-            client.id = uuid();
             await agent.Clients.update(client);
             runInAction(() => {
                 this.clientsRegister.set(client.id!, client as Client);

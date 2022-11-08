@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
+import ModalContainer from '../../common/modals/ModalContainer';
 import CarDetails from '../../features/cars/CarDetails';
 import CarsPage from '../../features/cars/CarsPage';
 import ClientPage from '../../features/clients/ClientPage';
@@ -11,6 +12,7 @@ import NavBar from './NavBar';
 function App() {
   return (
     <>
+      <ModalContainer />
       <NavBar />
       <Container>
         <Routes>
