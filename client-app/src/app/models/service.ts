@@ -22,7 +22,7 @@ export class ServiceFormValues {
     carId: string = '';
     
     constructor(service?: Service) {
-        if (service) { 
+        if (service) {
             this.id = service.id;
             this.date = service.date;
             this.mileage = service.mileage;

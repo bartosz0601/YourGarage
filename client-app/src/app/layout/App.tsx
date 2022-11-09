@@ -6,6 +6,7 @@ import CarDetails from '../../features/cars/CarDetails';
 import CarsPage from '../../features/cars/CarsPage';
 import ClientPage from '../../features/clients/ClientPage';
 import HomePage from '../../features/home/HomePage';
+import ServiceForm from '../../features/services/ServiceForm';
 import ServicesPage from '../../features/services/ServicesPage';
 import NavBar from './NavBar';
 
@@ -18,6 +19,8 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/services' element={<ServicesPage />} />
+          <Route path='/createService' element={<ServiceForm />} />
+          <Route path='/editService/:id' element={<ServiceForm />} />
           <Route path='/cars' element={<CarsPage />} />
           <Route path='/cars/:id' element={<CarDetails />} />
           <Route path='/clients' element={<ClientPage />} />

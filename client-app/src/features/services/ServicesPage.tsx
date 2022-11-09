@@ -4,16 +4,12 @@ import { Button, Container, Grid, GridColumn, GridRow, Icon } from 'semantic-ui-
 import { useStore } from '../../app/stores/store';
 import ServicesList from './ServicesList';
 import ServiceForm from './ServiceForm';
+import { Link} from 'react-router-dom';
 
 export default observer(function ServicesPage() {
 
-    const { serviceStore, commonStore } = useStore();
-    const { loadServices, formServiceState, setFormService } = serviceStore;
-    const { loadClientsName } = commonStore;
-
-    useEffect(() => {
-        loadClientsName();
-    }, [loadClientsName])
+    const { serviceStore} = useStore();
+    const { loadServices } = serviceStore;
 
     useEffect(() => {
         loadServices();
@@ -24,23 +20,20 @@ export default observer(function ServicesPage() {
             <Grid columns={2} padded>
                 <Grid.Row centered>
                     <Grid.Column width={2}>
-                        {!formServiceState &&
-                            <Button animated='vertical' size='big' color='black' type='button'
-                                onClick={() => setFormService(true)}
-                            >
-                                <Button.Content visible>Add</Button.Content>
-                                <Button.Content hidden>
-                                    <Icon name='plus square outline'></Icon>
-                                </Button.Content>
-                            </Button>
-                        }
-                    </Grid.Column>
-                    <Grid.Column width={12}>
-                        <ServicesList />
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-            {formServiceState && < ServiceForm />}
-        </Container>
+                        <Button animated='vertical' size='big' color='black' type='button'
+                            as={Link} to='/createService'
+                        >
+                        <Button.Content visible>Add</Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='plus square outline'></Icon>
+                        </Button.Content>
+                    </Button>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                    <ServicesList />
+                </Grid.Column>
+            </Grid.Row>
+        </Grid>
+        </Container >
     )
 })

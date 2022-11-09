@@ -13,9 +13,6 @@ interface Props {
 
 export default observer(function ServiceListItem({ service, deleteHandle }: Props) {
 
-    const { serviceStore, modalStore } = useStore();
-    const { formServiceState, setEditingService } = serviceStore;
-
     return (
         <Item.Group>
             <Item>
@@ -44,13 +41,13 @@ export default observer(function ServiceListItem({ service, deleteHandle }: Prop
                             Mileage: {service.mileage}km
                         </>
                     </Item.Extra>
-                    <Button floated='right' color='red' disabled={formServiceState}
+                    <Button floated='right' color='red' 
                         onClick={() => deleteHandle(service.id)}
                     >
                         Delete
                     </Button>
-                    <Button floated='right' color='blue' disabled={formServiceState}
-                        onClick={() => setEditingService(service.id)}>
+                    <Button floated='right' color='blue'
+                        as={Link} to={'/editService/' + service.id}>
                         Edit
                     </Button>
                 </Item.Content>

@@ -15,6 +15,7 @@ const requests = {
 }
 
 const Services = {
+    get: (id: string) => requests.get<Service>('/services/' + id),
     list: () => requests.get<Service[]>('/services'),
     create: (service: ServiceFormValues) => requests.post<Service>('/services/', service),
     update: (service: ServiceFormValues) => requests.put<Service>('/services/' + service.id, service),

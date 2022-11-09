@@ -11,7 +11,7 @@ import { dropDownOption } from '../../app/models/dropDownOption';
 
 export default observer(function CarForm() {
 
-    const { carStore, commonStore, modalStore} = useStore();
+    const { carStore, commonStore, modalStore } = useStore();
     const { editingCar, updateCar, createCar } = carStore;
     const { clientsNamesOptions } = commonStore;
 
@@ -40,7 +40,7 @@ export default observer(function CarForm() {
 
     return (
         <Segment clearing>
-            {/* {editingClient.id ? <Header>Client edit</Header> : <Header>Client create</Header>} */}
+            {editingCar.id ? <Header>Edit car</Header> : <Header>Create car</Header>}
             <Formik
                 initialValues={editingCar}
                 validationSchema={validationSchema}
@@ -51,7 +51,7 @@ export default observer(function CarForm() {
                         <MyTextInput name='model' placeholder='Model' label='Model' />
                         <MySelectInput name='year' placeholder='Year' label='Built year' options={yearsOptions} />
                         <MyTextInput name='vin' placeholder='Vin' label='VIN' />
-                        <MySelectInput name='clientId' placeholder='Client' label='Client' options={clientsNamesOptions}/>
+                        <MySelectInput name='clientId' placeholder='Client' label='Client' options={clientsNamesOptions} />
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
