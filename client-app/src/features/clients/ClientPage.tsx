@@ -19,7 +19,7 @@ export default observer(function ClientPage() {
             <Grid columns={2} padded>
                 <Grid.Row centered>
                     <Grid.Column width={2}>
-                        <Button animated='vertical' size='big' color='black' type='button'
+                        <Button animated='vertical' size='big' color='black' type='button' fluid
                             onClick={() => {
                                 initFormClient();
                                 modalStore.openModal(<ClientForm />);
@@ -30,7 +30,7 @@ export default observer(function ClientPage() {
                             </Button.Content>
                         </Button>
                     </Grid.Column>
-                    <Grid.Column width={12}>
+                    <Grid.Column width={14}>
                         <ClientsList />
                     </Grid.Column>
                 </Grid.Row>

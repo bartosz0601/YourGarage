@@ -19,8 +19,9 @@ export default class CarStore {
         this.editingCar = this.cars.filter(c => c.id === id)[0] as CarFormValues;
     }
 
-    initFormCar = () => {
+    initFormCar = (clientId?: string) => {
         this.editingCar = new CarFormValues();
+        if (clientId) this.editingCar.clientId = clientId;
     }
 
     getClientName = (id: string, clientsNames: ClientBasic[]) => {

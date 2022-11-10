@@ -20,7 +20,7 @@ export default observer(function ServicesPage() {
             <Grid columns={2} padded>
                 <Grid.Row centered>
                     <Grid.Column width={2}>
-                        <Button animated='vertical' size='big' color='black' type='button'
+                        <Button animated='vertical' size='big' color='black' type='button' fluid
                             as={Link} to='/createService'
                         >
                         <Button.Content visible>Add</Button.Content>
@@ -29,7 +29,7 @@ export default observer(function ServicesPage() {
                         </Button.Content>
                     </Button>
                 </Grid.Column>
-                <Grid.Column width={12}>
+                <Grid.Column width={14}>
                     <ServicesList />
                 </Grid.Column>
             </Grid.Row>

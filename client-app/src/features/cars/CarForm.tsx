@@ -9,7 +9,12 @@ import { useStore } from '../../app/stores/store';
 import { CarFormValues } from '../../app/models/car';
 import { dropDownOption } from '../../app/models/dropDownOption';
 
-export default observer(function CarForm() {
+interface Props {
+    extraSubmitFuncion?: Function,
+    disableClient?: boolean
+}
+
+export default observer(function CarForm(props: Props) {
 
     const { carStore, commonStore, modalStore } = useStore();
     const { editingCar, updateCar, createCar } = carStore;
@@ -34,7 +39,10 @@ export default observer(function CarForm() {
         if (car.id) {
             updateCar(car).then(() => modalStore.closeModal());
         } else {
-            createCar(car).then(() => modalStore.closeModal());
+            createCar(car).then(() => {
+                if (props.extraSubmitFuncion) props.extraSubmitFuncion();
+                modalStore.closeModal()
+            });
         }
     }
 
@@ -51,7 +59,8 @@ export default observer(function CarForm() {
                         <MyTextInput name='model' placeholder='Model' label='Model' />
                         <MySelectInput name='year' placeholder='Year' label='Built year' options={yearsOptions} />
                         <MyTextInput name='vin' placeholder='Vin' label='VIN' />
-                        <MySelectInput name='clientId' placeholder='Client' label='Client' options={clientsNamesOptions} />
+                        <MySelectInput name='clientId' placeholder='Client' label='Client'
+                            options={clientsNamesOptions} disabled={props.disableClient} />
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={isSubmitting} floated='right' positive type='submit' content='Submit' />

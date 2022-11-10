@@ -14,7 +14,7 @@ interface Props {
 export default function MySelectInput(props: Props) {
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} disabled={props.disabled}>
+        <Form.Field error={meta.touched && !!meta.error}>
             <label>{props.label}</label>
             <Select 
                 search
@@ -29,6 +29,7 @@ export default function MySelectInput(props: Props) {
                 }}  // E - event, d - data DropDownProps. 
                 onBlur={() => helpers.setTouched(true)}
                 placeholder={props.placeholder}
+                disabled={props.disabled}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>

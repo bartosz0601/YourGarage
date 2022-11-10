@@ -23,7 +23,7 @@ export default observer(function CarsPage() {
             <Grid columns={2} padded>
                 <Grid.Row centered>
                     <Grid.Column width={2}>
-                        <Button animated='vertical' size='big' color='black' type='button'
+                        <Button animated='vertical' size='big' color='black' type='button' fluid
                             onClick={() => {
                                 initFormCar();
                                 modalStore.openModal(<CarForm/>)
@@ -34,7 +34,7 @@ export default observer(function CarsPage() {
                             </Button.Content>
                         </Button>
                     </Grid.Column>
-                    <Grid.Column width={12}>
+                    <Grid.Column width={14}>
                         <CarsList />
                     </Grid.Column>
                 </Grid.Row>
