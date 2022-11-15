@@ -15,6 +15,7 @@ axios.interceptors.response.use(async response => {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination))
         return response as AxiosResponse<PaginatedResult<any>>
     }
+
     return response;
 })
 
