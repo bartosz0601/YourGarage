@@ -1,11 +1,23 @@
 import axios, { AxiosResponse } from 'axios';
 import { Car, CarFormValues } from '../models/car';
 import { Client, ClientBasic, ClientFormValues } from '../models/client';
+import { PaginatedResult } from '../models/pagination';
 import { Service, ServiceFormValues } from '../models/service';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
+
+axios.interceptors.response.use(async response => { 
+    //Dodatnie informacji o pagination w odpowiedzi z serwera 
+    const pagination = response.headers['pagination']; 
+    if (pagination) {
+        response.data = new PaginatedResult(response.data, JSON.parse(pagination))
+        return response as AxiosResponse<PaginatedResult<any>>
+    }
+
+    return response;
+})
 
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
@@ -16,7 +28,7 @@ const requests = {
 
 const Services = {
     get: (id: string) => requests.get<Service>('/services/' + id),
-    list: () => requests.get<Service[]>('/services'),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Service[]>>('/services', { params }).then(responseBody),
     create: (service: ServiceFormValues) => requests.post<Service>('/services/', service),
     update: (service: ServiceFormValues) => requests.put<Service>('/services/' + service.id, service),
     delete: (id: String) => requests.del<Service>('/services/' + id),

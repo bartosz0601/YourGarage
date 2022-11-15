@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Application.Sevices;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
@@ -16,9 +17,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery]ServiceParams param)
         {
-            return HandleResult(await Mediator.Send(new List.Query { }));
+            return HandlePagedResult(await Mediator.Send(new List.Query {Params = param }));
         }
 
         [HttpGet("{id}")]
