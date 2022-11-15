@@ -10,11 +10,11 @@ using Persistence;
 namespace Application.Services
 {
     public class List {
-        public class Query : IRequest<Result<List<ServiceDto>>>
+        public class Query : IRequest<Result<PagedList<ServiceDto>>>
         {
-
+            public ServiceParams Params { get; set;}
         }
-        public class Handler : IRequestHandler<Query, Result<List<ServiceDto>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<ServiceDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -24,10 +24,12 @@ namespace Application.Services
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<Result<List<ServiceDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<ServiceDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var services = await _context.Services.OrderByDescending(c => c.Date).ProjectTo<ServiceDto>(_mapper.ConfigurationProvider).ToListAsync();
-                return Result<List<ServiceDto>>.Success(services);
+                var query = _context.Services.Where(s => s.Date > request.Params.StartDate & s.Date <= request.Params.EndDate).OrderByDescending(c => c.Date).ProjectTo<ServiceDto>(_mapper.ConfigurationProvider).AsQueryable();
+                return Result<PagedList<ServiceDto>>.Success(
+                    await PagedList<ServiceDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
+                    );
             }
         }
     }

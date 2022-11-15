@@ -14,7 +14,7 @@ interface Props {
 export default observer(function ServiceListItem({ service, deleteHandle }: Props) {
 
     return (
-        <Item.Group>
+        <Item.Group >
             <Item>
                 <Item.Content>
                     <Item.Header fixed='left'>

@@ -1,18 +1,52 @@
 import { store } from "./store";
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Car, CarFormValues } from '../models/car';
 import agent from '../api/agent'
 import { ClientBasic } from "../models/client";
 import { v4 as uuid } from 'uuid';
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class CarStore {
 
     cars: Car[] = [];
     car: Car | undefined;
     editingCar = new CarFormValues();
+    pagingParams = new PagingParams();
+    pagination: Pagination | null = null;
+    searchParam: string = "";
 
     constructor() {
         makeAutoObservable(this);
+
+        reaction(
+            () => { return this.searchParam },
+            () => { 
+                this.pagingParams = new PagingParams();
+                this.cars = [];
+                this.loadCars();
+            }
+
+        )
+    }
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    }
+
+    setSearchParam = (text: string) => {
+        this.searchParam = text;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        params.append('searchParam', this.searchParam);
+        return params;
     }
 
     setEditingCar = (id: string) => {
@@ -46,10 +80,11 @@ export default class CarStore {
 
     loadCars = async () => {
         try {
-            const result = await agent.Cars.list();
+            const result = await agent.Cars.list(this.axiosParams);
             runInAction(() => {
-                this.cars = result;
+                this.cars.push(...result.data);
             })
+            this.setPagination(result.pagination);
         } catch (error) {
             console.log(error);
         }

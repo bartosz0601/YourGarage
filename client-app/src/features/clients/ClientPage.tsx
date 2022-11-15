@@ -4,6 +4,7 @@ import { Button, Container, Grid, Icon } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 import ClientForm from './ClientForm';
 import ClientsList from './ClientsList';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default observer(function ClientPage() {
 
@@ -31,7 +32,7 @@ export default observer(function ClientPage() {
                         </Button>
                     </Grid.Column>
                     <Grid.Column width={14}>
-                        <ClientsList />
+                            <ClientsList />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
