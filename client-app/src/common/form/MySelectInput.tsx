@@ -9,6 +9,7 @@ interface Props {
     label?: string;
     disabled?: boolean;
     onChange?: Function;
+    loading?: boolean;
 }
 
 export default function MySelectInput(props: Props) {
@@ -19,6 +20,7 @@ export default function MySelectInput(props: Props) {
             <Select 
                 search
                 clearable
+                loading={props.loading}
                 options={props.options}
                 value={field.value || null}
                 onChange={(e, d) => {

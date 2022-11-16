@@ -8,6 +8,7 @@ import { Pagination, PagingParams } from "../models/pagination";
 
 export default class CarStore {
 
+    loadingInitial = false;
     cars: Car[] = [];
     car: Car | undefined;
     editingCar = new CarFormValues();
@@ -20,12 +21,11 @@ export default class CarStore {
 
         reaction(
             () => { return this.searchParam },
-            () => { 
+            () => {
                 this.pagingParams = new PagingParams();
                 this.cars = [];
                 this.loadCars();
             }
-
         )
     }
 
@@ -49,6 +49,10 @@ export default class CarStore {
         return params;
     }
 
+    setLoadingInitial(state: boolean) {
+        this.loadingInitial = state;
+    }
+
     setEditingCar = (id: string) => {
         this.editingCar = this.cars.filter(c => c.id === id)[0] as CarFormValues;
     }
@@ -68,25 +72,31 @@ export default class CarStore {
     }
 
     loadCar = async (id: string) => {
+        this.loadingInitial = true;
         try {
             const result = await agent.Cars.details(id);
             runInAction(() => {
                 this.car = result
-            })
+            });
+            this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
+            this.setLoadingInitial(false);
         }
     }
 
     loadCars = async () => {
+        this.loadingInitial = true;
         try {
             const result = await agent.Cars.list(this.axiosParams);
             runInAction(() => {
                 this.cars.push(...result.data);
             })
             this.setPagination(result.pagination);
+            this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
+            this.setLoadingInitial(false);
         }
     }
 
@@ -94,9 +104,9 @@ export default class CarStore {
         try {
             car.id = uuid();
             await agent.Cars.create(car);
-            runInAction(() => {
-                this.cars.push(car as Car);
-            })
+            // runInAction(() => {
+            //     this.cars.push(car as Car);
+            // })
         } catch (error) {
             console.log(error);
         }

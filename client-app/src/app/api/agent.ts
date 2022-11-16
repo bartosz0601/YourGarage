@@ -4,12 +4,20 @@ import { Client, ClientBasic, ClientFormValues } from '../models/client';
 import { PaginatedResult } from '../models/pagination';
 import { Service, ServiceFormValues } from '../models/service';
 
+const sleep = (delay: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay)
+    })
+}
+
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 axios.interceptors.response.use(async response => { 
-    //Dodatnie informacji o pagination w odpowiedzi z serwera 
+    await sleep(1000);
+    
+    //Dodatnie informacji o pagination w odpowiedzi z serwera
     const pagination = response.headers['pagination']; 
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination))
@@ -36,7 +44,7 @@ const Services = {
 
 const Clients = {
     get: (id: string) => requests.get<Client>('/clients/' + id),
-    list: () => requests.get<Client[]>('/clients'),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Client[]>>('/clients', { params }).then(responseBody),
     listBasic: () => requests.get<ClientBasic[]>('/clients/basic'),
     create: (client: ClientFormValues) => requests.post<void>('/clients/', client),
     update: (client: ClientFormValues) => requests.put<void>('/clients/' + client.id, client),

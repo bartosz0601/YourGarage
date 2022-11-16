@@ -6,6 +6,7 @@ import { Pagination, PagingParams } from "../models/pagination";
 
 export default class ServiceStore {
 
+    loadingInitial = false;
     services: Service[] = [];
     pagingParams = new PagingParams();
     pagination: Pagination | null = null;
@@ -57,7 +58,12 @@ export default class ServiceStore {
         return params;
     }
 
+    setLoadingInitial(state: boolean) {
+        this.loadingInitial = state;
+    }
+
     loadServices = async () => {
+        this.loadingInitial = true;
         try {
             const result = await agent.Services.list(this.axiosParams);
             runInAction(() => {
@@ -65,8 +71,10 @@ export default class ServiceStore {
                 this.services.push(...result.data);
             })
             this.setPagination(result.pagination);
+            this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
+            this.setLoadingInitial(false);
         }
     }
 
@@ -80,14 +88,17 @@ export default class ServiceStore {
     }
 
     loadService = async (id: string) => {
+        this.loadingInitial = true;
         try {
             let result = await agent.Services.get(id).then();
             runInAction(() => {
                 result.date = new Date(result.date!);
             })
+            this.setLoadingInitial(false);
             return result;
         } catch (error) {
             console.log(error);
+            this.setLoadingInitial(false);
         }
     }
 

@@ -1,16 +1,29 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, reaction } from 'mobx';
 import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
 import { v4 as uuid } from 'uuid';
 import ModalStore from './modalStore';
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class ClientStore {
 
+    loadingInitial = false;
     clientsRegister = new Map<string, Client>();
     editingClient = new ClientFormValues();
+    pagingParams = new PagingParams();
+    pagination: Pagination | null = null;
+    searchParam: string = "";
 
     constructor() {
         makeAutoObservable(this);
+        reaction(
+            () => { return this.searchParam },
+            () => {
+                this.pagingParams = new PagingParams();
+                this.clientsRegister.clear();
+                this.loadClients();
+            }
+        )
     }
 
     get clients() {
@@ -23,6 +36,30 @@ export default class ClientStore {
         });
     }
 
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    }
+
+    setSearchParam = (text: string) => {
+        this.searchParam = text;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        params.append('searchParam', this.searchParam);
+        return params;
+    }
+
+    setLoadingInitial(state: boolean) {
+        this.loadingInitial = state;
+    }
+
     setEditingClient = (id: string) => {
         this.editingClient = this.clientsRegister.get(id)!;
     }
@@ -32,15 +69,19 @@ export default class ClientStore {
     }
 
     loadClients = async () => {
+        this.loadingInitial = true;
         try {
-            const result = await agent.Clients.list();
+            const result = await agent.Clients.list(this.axiosParams);
             runInAction(() => {
-                result.forEach(x => {
+                result.data.forEach(x => {
                     this.clientsRegister.set(x.id, x);
                 })
             })
+            this.setPagination(result.pagination);
+            this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
+            this.setLoadingInitial(false);
         }
     }
 
@@ -51,6 +92,7 @@ export default class ClientStore {
             runInAction(() => {
                 this.clientsRegister.set(client.id!, client as Client);
             })
+            return client.id;
         } catch (error) {
             console.log(error);
         }

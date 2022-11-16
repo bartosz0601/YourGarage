@@ -10,7 +10,7 @@ import MyTextArea from "../../common/form/MyTextArea";
 import { observer } from 'mobx-react-lite';
 
 interface Props { 
-    extraSubmitFuncion?: Function,
+    extraSubmitFuncion?: (text:string) => void,
 }
 
 export default observer( function ClientForm(props: Props) {
@@ -31,9 +31,9 @@ export default observer( function ClientForm(props: Props) {
         if (client.id) {
             updateClient(client).then(() => modalStore.closeModal());
         } else {
-            createClient(client).then(() => {
-                if (props.extraSubmitFuncion) props.extraSubmitFuncion();
-                modalStore.closeModal()
+            createClient(client).then((id) => {
+                if (props.extraSubmitFuncion) props.extraSubmitFuncion(id!);
+                modalStore.closeModal();
             });
         }
     }

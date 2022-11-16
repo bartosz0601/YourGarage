@@ -8,7 +8,6 @@ namespace Application.Core
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
-
         public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
         {
             CurrentPage = pageNumber;
@@ -17,10 +16,9 @@ namespace Application.Core
             TotalCount = count;
             AddRange(items);                       
         }
-
         public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
         {
-            var count = await source.CountAsync();// 
+            var count = await source.CountAsync();
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); // bierzemy tylko określoną liczbe elementów z bazy. Bez sensu zawsze ładować wszystko
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }

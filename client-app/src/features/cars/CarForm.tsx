@@ -38,10 +38,12 @@ export default observer(function CarForm(props: Props) {
     function handleFormSubmit(car: CarFormValues) {
         if (car.id) {
             updateCar(car).then(() => modalStore.closeModal());
+
         } else {
             createCar(car).then(() => {
                 if (props.extraSubmitFuncion) props.extraSubmitFuncion();
-                modalStore.closeModal()
+                modalStore.closeModal();
+                
             });
         }
     }

@@ -19,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] ClientParams param)
         {
-            return HandleResult(await Mediator.Send(new List.Query { }));
+            return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
         }
 
         [HttpGet("basic")]

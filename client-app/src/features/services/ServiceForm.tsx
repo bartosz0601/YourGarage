@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useStore } from '../../app/stores/store';
-import { Button, Grid, GridColumn, GridRow, Header, Icon, Message, Segment, Form } from 'semantic-ui-react';
+import { Button, Grid, GridColumn, GridRow, Header, Icon, Message, Segment, Form, Dimmer, Loader, Placeholder } from 'semantic-ui-react';
 import MySelectInput from '../../common/form/MySelectInput';
 import MyTextInput from '../../common/form/MyTextInput';
 import MyTextArea from '../../common/form/MyTextArea';
@@ -20,11 +20,12 @@ export default observer(function ServiceForm() {
     const { id } = useParams<{ id: string }>();
     const { serviceStore, commonStore, clientStore, carStore, modalStore } = useStore();
     const { clientsNamesOptions, loadClientsName } = commonStore;
-    const { loadService, loadClient, createService, updateService } = serviceStore;
+    const { loadService, loadClient, createService, updateService, loadingInitial } = serviceStore;
 
     const [service, setService] = useState<ServiceFormValues>(new ServiceFormValues());
     const [client, setClient] = useState<Client>();
     const [carsNamesOptions, setCarsNamesOptions] = useState<dropDownOption<string>[]>([]);
+    const [loadingClient, setLoadingClient] = useState<boolean>();
 
     useEffect(() => {
         loadClientsName();
@@ -44,7 +45,8 @@ export default observer(function ServiceForm() {
         }
     }, [id, loadService])
 
-    const readClient = (clientId: string) => {
+    const readClient = (clientId: string, loadingStatus: boolean = true) => {
+        if (loadingStatus) setLoadingClient(true);
         loadClient(clientId).then(c => {
             setClient(c);
             let names: dropDownOption<string>[] = [];
@@ -52,6 +54,7 @@ export default observer(function ServiceForm() {
                 names.push({ text: c.brand + ' ' + c.model + ' ' + c.year, value: c.id });
             }))
             setCarsNamesOptions(names);
+            setLoadingClient(false);
         });
     }
 
@@ -71,6 +74,12 @@ export default observer(function ServiceForm() {
         } else {
             createService(service).then(() => navigate('/services'));
         }
+    }
+
+    if (loadingInitial) {
+        return (
+            <Loader active />
+        )
     }
 
     return (
@@ -98,19 +107,26 @@ export default observer(function ServiceForm() {
                                         <Button floated='right' content='Create new' color='green' type='button' fluid
                                             onClick={() => {
                                                 clientStore.initFormClient();
-                                                modalStore.openModal(<ClientForm extraSubmitFuncion={() => loadClientsName()} />);
+                                                modalStore.openModal(<ClientForm extraSubmitFuncion={(id: string) => {
+                                                    loadClientsName();
+                                                    setService({ ...service, clientId: id });
+                                                    values.carId = '';
+                                                }} />);
                                             }} />
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
                             {values.clientId &&
                                 <Message>
+                                    <Dimmer active={loadingClient} inverted>
+                                        <Loader inverted />
+                                    </Dimmer>
                                     <Message.Header>Client information</Message.Header>
                                     <Message.Content>
                                         <Grid columns={3} padded>
                                             <GridRow>
                                                 <GridColumn>
-                                                    <Icon name='phone' />{client?.phone}
+                                                    <Icon name='phone' /> {client?.phone}
                                                 </GridColumn>
                                                 <GridColumn>
                                                     <Icon name='mail' />{client?.email}
@@ -125,15 +141,14 @@ export default observer(function ServiceForm() {
                             <Grid verticalAlign='bottom'>
                                 <Grid.Row columns={2}>
                                     <Grid.Column width={13}>
-                                        <MySelectInput name='carId' placeholder='Choose car' label='Car' disabled={!values.clientId}
-                                            options={carsNamesOptions} />
+                                        <MySelectInput name='carId' placeholder='Choose car' label='Car' disabled={!values.clientId || loadingClient}
+                                            options={carsNamesOptions} loading={loadingClient} />
                                     </Grid.Column>
                                     <Grid.Column width={3}>
-
                                         <Button floated='right' content='Create new' color='green' type='button' disabled={!values.clientId} fluid
                                             onClick={() => {
                                                 carStore.initFormCar(values.clientId);
-                                                modalStore.openModal(<CarForm disableClient={true} extraSubmitFuncion={() => readClient(service.clientId)} />);
+                                                modalStore.openModal(<CarForm disableClient={true} extraSubmitFuncion={() => readClient(service.clientId, false)} />);
                                             }}
                                         />
                                     </Grid.Column>
