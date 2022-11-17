@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Grid, Header, Icon, Label, Loader, Statistic } from 'semantic-ui-react'
+import { Container, Grid, Header, Icon, Loader, Statistic } from 'semantic-ui-react'
 import { useStore } from '../../app/stores/store';
 
 
@@ -24,10 +24,10 @@ export default function HomePage() {
     }, [carStore.loadAmount])
 
     useEffect(() => {
-        clientStore.loadAmount().then((result) => {
+        carStore.loadAmount().then((result) => {
             setClientAmout(result);
         })
-    }, [clientStore.loadAmount])
+    }, [carStore.loadAmount])
 
     return (
         <Container style={{ marginTop: "100px" }}>

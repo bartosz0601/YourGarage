@@ -2,7 +2,6 @@ import { makeAutoObservable, runInAction, reaction } from 'mobx';
 import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
 import { v4 as uuid } from 'uuid';
-import ModalStore from './modalStore';
 import { Pagination, PagingParams } from "../models/pagination";
 
 export default class ClientStore {

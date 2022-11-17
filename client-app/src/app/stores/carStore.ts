@@ -1,4 +1,3 @@
-import { store } from "./store";
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { Car, CarFormValues } from '../models/car';
 import agent from '../api/agent'
@@ -9,7 +8,7 @@ import { Pagination, PagingParams } from "../models/pagination";
 export default class CarStore {
 
     loadingInitial = false;
-    cars: Car[] = [];
+    carsRegister = new Map<string, Car>();
     car: Car | undefined;
     editingCar = new CarFormValues();
     pagingParams = new PagingParams();
@@ -23,7 +22,7 @@ export default class CarStore {
             () => { return this.searchParam },
             () => {
                 this.pagingParams = new PagingParams();
-                this.cars = [];
+                this.carsRegister.clear();
                 this.loadCars();
             }
         )
@@ -41,6 +40,10 @@ export default class CarStore {
         this.searchParam = text;
     }
 
+    get cars() {
+        return Array.from(this.carsRegister.values());
+    }
+
     get axiosParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
@@ -54,7 +57,7 @@ export default class CarStore {
     }
 
     setEditingCar = (id: string) => {
-        this.editingCar = this.cars.filter(c => c.id === id)[0] as CarFormValues;
+        this.editingCar = this.carsRegister.get(id)!;
     }
 
     initFormCar = (clientId?: string) => {
@@ -90,7 +93,9 @@ export default class CarStore {
         try {
             const result = await agent.Cars.list(this.axiosParams);
             runInAction(() => {
-                this.cars.push(...result.data);
+                result.data.forEach(x => {
+                    this.carsRegister.set(x.id, x);
+                })
             })
             this.setPagination(result.pagination);
             this.setLoadingInitial(false);
@@ -114,9 +119,6 @@ export default class CarStore {
         try {
             car.id = uuid();
             await agent.Cars.create(car);
-            // runInAction(() => {
-            //     this.cars.push(car as Car);
-            // })
         } catch (error) {
             console.log(error);
         }
@@ -126,8 +128,7 @@ export default class CarStore {
         try {
             await agent.Cars.update(car);
             runInAction(() => {
-                let index = this.cars.findIndex(c => c.id === car.id)
-                this.cars[index] = car as Car;
+                this.carsRegister.set(car.id!, car as Car);
             })
         } catch (error) {
             console.log(error);
@@ -138,7 +139,7 @@ export default class CarStore {
         try {
             await agent.Cars.delete(id);
             runInAction(() => {
-                this.cars = this.cars.filter(c => !(c.id === id))
+                this.carsRegister.delete(id);
             })
         } catch (error) {
             console.log(error);

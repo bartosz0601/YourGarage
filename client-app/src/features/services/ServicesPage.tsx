@@ -11,7 +11,7 @@ import DatePicker from 'react-datepicker';
 export default observer(function ServicesPage() {
     const { serviceStore } = useStore();
     const { services, loadServices, setPagingParams, pagination, startDate,
-        endDate, setDates, loadingInitial} = serviceStore;
+        endDate, setDates, loadingInitial } = serviceStore;
 
     useEffect(() => {
         if (services.length < 1) loadServices();
@@ -68,7 +68,7 @@ export default observer(function ServicesPage() {
 
                         }}
                     />
-                    {!loadingInitial && <Statistic label='Services' value={pagination?.totalItems} />}
+                    {(!loadingInitial || loadingNext) && <Statistic label='Services' value={pagination?.totalItems} />}
                 </Grid.Column>
                 <Grid.Column width={14}>
                     <Loader active={loadingNext || loadingInitial} />

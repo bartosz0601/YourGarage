@@ -7,7 +7,7 @@ import { Pagination, PagingParams } from "../models/pagination";
 export default class ServiceStore {
 
     loadingInitial = false;
-    services: Service[] = [];
+    servicesRegister = new Map<String, Service>();
     pagingParams = new PagingParams();
     pagination: Pagination | null = null;
     startDate: Date = this.GetPastDate(30);
@@ -23,7 +23,7 @@ export default class ServiceStore {
             () => {
                 if (this.startDate && this.endDate) {
                     this.pagingParams = new PagingParams();
-                    this.services = [];
+                    this.servicesRegister.clear();
                     this.loadServices();
                 }
             }
@@ -47,6 +47,10 @@ export default class ServiceStore {
     setDates = (startDate: Date, endDate: Date) => {
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    get services() {
+        return Array.from(this.servicesRegister.values());
     }
 
     get axiosParams() {
@@ -75,8 +79,10 @@ export default class ServiceStore {
         try {
             const result = await agent.Services.list(this.axiosParams);
             runInAction(() => {
-                result.data.forEach(s => { s.date = new Date(s.date!) });
-                this.services.push(...result.data);
+                result.data.forEach(s => {
+                    s.date = new Date(s.date!);
+                    this.servicesRegister.set(s.id, s);
+                });
             })
             this.setPagination(result.pagination);
             this.setLoadingInitial(false);
@@ -141,7 +147,7 @@ export default class ServiceStore {
         try {
             await agent.Services.delete(id);
             runInAction(() => {
-                this.services = this.services.filter(s => !(s.id === id))
+                this.servicesRegister.delete(id);
             })
         } catch (error) {
             console.log(error);
