@@ -58,6 +58,14 @@ export default class ServiceStore {
         return params;
     }
 
+    get axiosDatesParams() {
+        const params = new URLSearchParams();
+        params.append('dateTimes', this.GetPastDate(365).toISOString());
+        params.append('dateTimes', this.GetPastDate(30).toISOString());
+        params.append('dateTimes', this.GetPastDate(7).toISOString());
+        return params;
+    }
+
     setLoadingInitial(state: boolean) {
         this.loadingInitial = state;
     }
@@ -99,6 +107,16 @@ export default class ServiceStore {
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
+        }
+    }
+
+    loadStatistics = async () => {
+        try {
+            const result = await agent.Services.statistics(this.axiosDatesParams);
+            return result;
+        }
+        catch (error) {
+            console.log(error);
         }
     }
 

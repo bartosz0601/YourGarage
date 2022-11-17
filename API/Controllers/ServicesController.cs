@@ -28,6 +28,12 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Get.Query { Id = id }));
         }
 
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetStatistics([FromQuery] IEnumerable<DateTime> dateTimes)
+        {
+            return HandleResult(await Mediator.Send(new Statistics.Query { DateTimes = dateTimes }));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Service service)
         {

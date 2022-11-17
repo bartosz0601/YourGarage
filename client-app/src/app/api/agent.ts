@@ -28,7 +28,7 @@ axios.interceptors.response.use(async response => {
 })
 
 const requests = {
-    get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+    get: <T>(url: string, params?: URLSearchParams) => axios.get<T>(url, { params }).then(responseBody),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
@@ -36,7 +36,8 @@ const requests = {
 
 const Services = {
     get: (id: string) => requests.get<Service>('/services/' + id),
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Service[]>>('/services', { params }).then(responseBody),
+    list: (params: URLSearchParams) => requests.get<PaginatedResult<Service[]>>('/services', params),
+    statistics: (params: URLSearchParams) => requests.get<Number[]>('services/statistics', params),
     create: (service: ServiceFormValues) => requests.post<Service>('/services/', service),
     update: (service: ServiceFormValues) => requests.put<Service>('/services/' + service.id, service),
     delete: (id: String) => requests.del<Service>('/services/' + id),
@@ -46,6 +47,7 @@ const Clients = {
     get: (id: string) => requests.get<Client>('/clients/' + id),
     list: (params: URLSearchParams) => axios.get<PaginatedResult<Client[]>>('/clients', { params }).then(responseBody),
     listBasic: () => requests.get<ClientBasic[]>('/clients/basic'),
+    amount: () => requests.get<Number>('/clients/amount'),
     create: (client: ClientFormValues) => requests.post<void>('/clients/', client),
     update: (client: ClientFormValues) => requests.put<void>('/clients/' + client.id, client),
     delete: (id: string) => requests.del<void>('/clients/' + id)
@@ -54,6 +56,7 @@ const Clients = {
 const Cars = {
     list: (params: URLSearchParams) => axios.get<PaginatedResult<Car[]>>('/cars', { params }).then(responseBody),
     details: (id: string) => requests.get<Car>('/cars/' + id),
+    amount: () => requests.get<Number>('/cars/amount'),
     create: (car: CarFormValues) => requests.post<void>('/cars/', car),
     update: (car: CarFormValues) => requests.put<void>('/cars/' + car.id, car),
     delete: (id: string) => requests.del<void>('/cars/' + id),

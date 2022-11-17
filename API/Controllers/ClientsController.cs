@@ -30,6 +30,12 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new ListBasic.Query { }));
         }
 
+        [HttpGet("amount")]
+        public async Task<IActionResult> GetAmount()
+        {
+            return HandleResult(await Mediator.Send(new Amount.Query { }));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {

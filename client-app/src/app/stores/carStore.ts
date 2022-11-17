@@ -100,6 +100,16 @@ export default class CarStore {
         }
     }
 
+    loadAmount = async () => {
+        try {
+            const result = await agent.Cars.amount();
+            return result;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     createCar = async (car: CarFormValues) => {
         try {
             car.id = uuid();

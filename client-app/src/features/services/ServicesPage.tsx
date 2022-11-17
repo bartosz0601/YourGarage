@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Container, Grid, Header, Icon, Loader } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Loader, Statistic } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 import ServicesList from './ServicesList';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ import DatePicker from 'react-datepicker';
 export default observer(function ServicesPage() {
     const { serviceStore } = useStore();
     const { services, loadServices, setPagingParams, pagination, startDate,
-        endDate, setDates, loadingInitial } = serviceStore;
+        endDate, setDates, loadingInitial} = serviceStore;
 
     useEffect(() => {
         if (services.length < 1) loadServices();
@@ -68,6 +68,7 @@ export default observer(function ServicesPage() {
 
                         }}
                     />
+                    {!loadingInitial && <Statistic label='Services' value={pagination?.totalItems} />}
                 </Grid.Column>
                 <Grid.Column width={14}>
                     <Loader active={loadingNext || loadingInitial} />

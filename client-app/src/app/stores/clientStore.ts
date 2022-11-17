@@ -85,6 +85,16 @@ export default class ClientStore {
         }
     }
 
+    loadAmount = async () => {
+        try {
+            const result = await agent.Clients.amount();
+            return result;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     createClient = async (client: ClientFormValues) => {
         try {
             client.id = uuid();
