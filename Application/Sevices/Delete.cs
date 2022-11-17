@@ -6,6 +6,7 @@ using Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,8 +29,16 @@ namespace Application.Services
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var service = await _context.Services.FindAsync(request.Id);
+
+                if (service == null)
+                {
+                    return null;
+                }
+
                 _context.Services.Remove(service);
+
                 var result = await _context.SaveChangesAsync() > 0;
+
                 if (result)
                 {
                     return Result<Unit>.Success(Unit.Value);

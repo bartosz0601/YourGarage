@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { store, StoreContext } from './app/stores/store';
 import { BrowserRouter } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 import ScrollToTop from './app/layout/ScrollToTop';
 
 const root = ReactDOM.createRoot(

@@ -23,8 +23,16 @@ namespace Application.Cars
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var car = await _context.Cars.FindAsync(request.Id);
+
+                if (car == null)
+                {
+                    return null;
+                }
+
                 _context.Remove(car);
+
                 var result = await _context.SaveChangesAsync() > 0;
+
                 if (result)
                 {
                     return Result<Unit>.Success(Unit.Value);

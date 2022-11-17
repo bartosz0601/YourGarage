@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
 import { Car, CarFormValues } from '../models/car';
 import { Client, ClientBasic, ClientFormValues } from '../models/client';
 import { PaginatedResult } from '../models/pagination';
@@ -14,18 +15,35 @@ axios.defaults.baseURL = 'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-axios.interceptors.response.use(async response => { 
+axios.interceptors.response.use(async response => {
     await sleep(1000);
-    
+
     //Dodatnie informacji o pagination w odpowiedzi z serwera
-    const pagination = response.headers['pagination']; 
+    const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination))
         return response as AxiosResponse<PaginatedResult<any>>
     }
-
     return response;
-})
+}, (error: AxiosError) => {
+    const { data, status } = error.response!;
+    switch (status) {
+        case 400:
+            toast.error('bad request');
+            break;
+        case 401:
+            toast.error('unauthorised');
+            break;
+        case 404:
+            toast.error('not found');
+            window.location.replace('http://localhost:3000/not-found'); // przeładowuje całą strone 
+            break;
+        case 500:
+            toast.error('server error');
+            break;
+    }
+    return Promise.reject(error);
+});
 
 const requests = {
     get: <T>(url: string, params?: URLSearchParams) => axios.get<T>(url, { params }).then(responseBody),

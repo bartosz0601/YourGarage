@@ -21,7 +21,13 @@ namespace Application.Clients
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var client = await _context.Clients.FindAsync(request.Id);
+                
+                if (client == null) {
+                    return null;
+                }
+
                 _context.Remove(client);
+
                 var result = await _context.SaveChangesAsync() > 0;
                 if (result)
                 {

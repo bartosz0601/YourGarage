@@ -26,7 +26,7 @@ export default observer(function ServicesPage() {
     }
 
     return (
-        <Container style={{ marginTop: "100px" }}>
+        <Container >
             <Grid columns={2} padded>
                 <Grid.Column width={2}>
                     <Button animated='vertical' size='big' color='black' type='button' fluid

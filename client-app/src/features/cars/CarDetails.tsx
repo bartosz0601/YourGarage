@@ -16,7 +16,7 @@ export default observer(function CarDetails() {
 
     return (
         <>{!loadingInitial &&
-            <Container style={{ marginTop: "100px" }}>
+            <Container>
                 <Grid columns={3} padded>
                     <Grid.Column width={2} />
                     <Grid.Column width={10} >

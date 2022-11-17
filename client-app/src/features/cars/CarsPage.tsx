@@ -31,7 +31,7 @@ export default observer(function CarsPage() {
     }
 
     return (
-        <Container style={{ marginTop: "100px" }}>
+        <Container>
             <Grid columns={3} padded>
                 <Grid.Column width={2}>
                     <Button animated='vertical' size='big' color='black' type='button' fluid
