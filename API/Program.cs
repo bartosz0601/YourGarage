@@ -5,6 +5,9 @@ using MediatR;
 using System.Reflection;
 using Application.Clients;
 using Application.Core;
+using API.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +40,8 @@ builder.Services.AddMediatR(typeof(List.Handler).Assembly);
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
+builder.Services.AddIdentityService(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,11 +63,13 @@ app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
+var userManager = services.GetRequiredService<UserManager<AppUser>>();
+
 try
 {
     var context = services.GetRequiredService<DataContext>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context);
+    await Seed.SeedData(context, userManager);
 }
 catch (Exception ex)
 {
