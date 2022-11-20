@@ -8,6 +8,8 @@ using Application.Core;
 using API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,12 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddControllers().AddJsonOptions(x =>
+builder.Services.AddControllers(opt => 
+    {
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+    })
+    .AddJsonOptions(x =>
      x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddMediatR(typeof(List.Handler).Assembly);
@@ -56,6 +63,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
