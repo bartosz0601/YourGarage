@@ -1,9 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { config } from 'process';
 import { toast } from 'react-toastify';
 import { Car, CarFormValues } from '../models/car';
 import { Client, ClientBasic, ClientFormValues } from '../models/client';
 import { PaginatedResult } from '../models/pagination';
 import { Service, ServiceFormValues } from '../models/service';
+import { User, UserFormValues } from '../models/user';
+import { store } from '../stores/store';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -14,6 +17,13 @@ const sleep = (delay: number) => {
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
+
+axios.interceptors.request.use(config => { 
+    const token = store.commonStore.token;
+    const bearerToken = 'Bearer ' + token;
+    if (token) config.headers!.Authorization = bearerToken;
+    return config; 
+})
 
 axios.interceptors.response.use(async response => {
     await sleep(1000);
@@ -26,10 +36,31 @@ axios.interceptors.response.use(async response => {
     }
     return response;
 }, (error: AxiosError) => {
-    const { data, status } = error.response!;
+    const { data: d, status } = error.response!;
+    let data: any = d;
+
     switch (status) {
         case 400:
-            toast.error('bad request');
+
+            if (data == 'Register error') {
+                toast.error(data);
+                throw [data];
+            }
+
+            if (data.errors) {
+                const modelStateError = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
+                        modelStateError.push(data.errors[key])
+                    }
+                }
+                throw modelStateError.flat();
+            }
+
+            if (typeof data === 'string') {
+                toast.error(data);
+            }
+
             break;
         case 401:
             toast.error('unauthorised');
@@ -80,10 +111,18 @@ const Cars = {
     delete: (id: string) => requests.del<void>('/cars/' + id),
 }
 
+const Account = {
+    login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register', user),
+    current: () => requests.get<User>('/account'),
+}
+
+
 const agent = {
     Services,
     Clients,
-    Cars
+    Cars, 
+    Account
 }
 
 export default agent;

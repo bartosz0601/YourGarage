@@ -4,13 +4,15 @@ import ClientStore from "./clientStore";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
 import ServiceStore from "./serviceStore";
+import UserStore from "./userStore";
 
 interface Store {
     serviceStore: ServiceStore,
     clientStore: ClientStore,
     carStore: CarStore,
     commonStore: CommonStore,
-    modalStore: ModalStore
+    modalStore: ModalStore,
+    userStore: UserStore
 }
 
 export const store: Store = {
@@ -18,7 +20,8 @@ export const store: Store = {
     clientStore: new ClientStore(),
     carStore: new CarStore(),
     commonStore: new CommonStore(),
-    modalStore: new ModalStore()
+    modalStore: new ModalStore(),
+    userStore: new UserStore()
 }
 
 export const StoreContext = createContext(store);

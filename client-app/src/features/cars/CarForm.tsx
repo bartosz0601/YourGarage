@@ -43,34 +43,33 @@ export default observer(function CarForm(props: Props) {
             createCar(car).then(() => {
                 if (props.extraSubmitFuncion) props.extraSubmitFuncion();
                 modalStore.closeModal();
-                
+
             });
         }
     }
 
     return (
-        <Segment clearing>
-            {editingCar.id ? <Header>Edit car</Header> : <Header>Create car</Header>}
-            <Formik
-                initialValues={editingCar}
-                validationSchema={validationSchema}
-                onSubmit={values => handleFormSubmit(values)}>
-                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <MyTextInput name='brand' placeholder='Brand' label='Brand' />
-                        <MyTextInput name='model' placeholder='Model' label='Model' />
-                        <MySelectInput name='year' placeholder='Year' label='Built year' options={yearsOptions} />
-                        <MyTextInput name='vin' placeholder='Vin' label='VIN' />
-                        <MySelectInput name='clientId' placeholder='Client' label='Client'
-                            options={clientsNamesOptions} disabled={props.disableClient} />
-                        <Button
-                            disabled={isSubmitting || !dirty || !isValid}
-                            loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
-                        <Button floated='right' type='button' content='Cancel'
-                            onClick={() => modalStore.closeModal()} />
-                    </Form>
-                )}
-            </Formik >
-        </Segment>
+        <Formik
+            initialValues={editingCar}
+            validationSchema={validationSchema}
+            onSubmit={values => handleFormSubmit(values)}>
+            {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+                    {editingCar.id ? <Header>Edit car</Header> : <Header>Create car</Header>}
+                    <MyTextInput name='brand' placeholder='Brand' label='Brand' />
+                    <MyTextInput name='model' placeholder='Model' label='Model' />
+                    <MySelectInput name='year' placeholder='Year' label='Built year' options={yearsOptions} />
+                    <MyTextInput name='vin' placeholder='Vin' label='VIN' />
+                    <MySelectInput name='clientId' placeholder='Client' label='Client'
+                        options={clientsNamesOptions} disabled={props.disableClient} />
+                    <Button
+                        disabled={isSubmitting || !dirty || !isValid}
+                        loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
+                    <Button floated='right' type='button' content='Cancel'
+                        onClick={() => modalStore.closeModal()}
+                        style={{ marginBottom: '10px' }} />
+                </Form>
+            )}
+        </Formik >
     )
 })

@@ -40,25 +40,24 @@ namespace API.Controllers
             {
                 return new UserDto
                 {
-                    UserName = user.UserName,
+                    Username = user.UserName,
                     Email = user.Email,
                     Token = _tokenService.CreateToken(user)
                 };
             }
-
             return Unauthorized();
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
+            if (await _userManager.Users.AnyAsync(x => x.NormalizedEmail == registerDto.Email.ToUpper()))
             {
                 ModelState.AddModelError("email", "Email taken");
                 return ValidationProblem();
             }
 
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))//(x => x.NormalizedUserName == registerDto.UserName.ToUpper()))
             {
                 ModelState.AddModelError("username", "Username taken");
                 return ValidationProblem();
@@ -76,12 +75,12 @@ namespace API.Controllers
             {
                 return new UserDto
                 {
-                    UserName = user.UserName,
+                    Username = user.UserName,
                     Email = user.Email,
                     Token = _tokenService.CreateToken(user)
                 };
             }
-            return BadRequest("Problem registering user");
+            return BadRequest("Register error");
         }
 
         [Authorize] // sprawdzamy token
@@ -91,7 +90,7 @@ namespace API.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)); // Bierzemy adres email z tokena który przyszedł z zapytanie HTTP get
             return new UserDto
             {
-                UserName = user.UserName,
+                Username = user.UserName,
                 Email = user.Email,
                 Token = _tokenService.CreateToken(user)
             };
