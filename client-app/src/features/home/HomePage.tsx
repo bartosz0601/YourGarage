@@ -1,11 +1,14 @@
+import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react'
-import { Container, Grid, Header, Icon, Loader, Statistic } from 'semantic-ui-react'
+import { Button, Container, Grid, Header, Icon, Loader, Statistic } from 'semantic-ui-react'
 import { useStore } from '../../app/stores/store';
+import LoginForm from '../users/LoginForm';
+import RegisterForm from '../users/RegisterForm';
 
 
-export default function HomePage() {
+export default observer(function HomePage() {
 
-    const { serviceStore, carStore, clientStore } = useStore();
+    const { serviceStore, carStore,userStore} = useStore();
 
     const [serviceStatistics, setServiceStatistics] = useState<Number[]>([]);
     const [carsAmount, setCarsAmout] = useState<Number>();
@@ -30,11 +33,12 @@ export default function HomePage() {
     }, [carStore.loadAmount])
 
     return (
-        <Container style={{ marginTop: "100px" }}>
+
+        <Container>
             <Grid>
                 <Grid.Row textAlign="center" columns={1}>
                     <Grid.Column width={16}>
-                        <Header as='h1'>Manage your workshop!</Header>
+                        <Header as='h1'>Hello {userStore.user?.username}! <br/> Manage your workshop!</Header>
                     </Grid.Column>
                 </Grid.Row>
                 {serviceStatistics.length > 0 && carsAmount && clientAmount ?
@@ -96,4 +100,4 @@ export default function HomePage() {
             </Grid>
         </Container>
     )
-}
+})

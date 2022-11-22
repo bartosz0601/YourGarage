@@ -27,7 +27,7 @@ export default observer(function ClientPage() {
     }
 
     return (
-        <Container >
+        <Container style={{ height: '100vh' }}>
             <Grid columns={2} padded>
                 <Grid.Column width={2}>
                     <Button animated='vertical' size='big' color='black' type='button' fluid

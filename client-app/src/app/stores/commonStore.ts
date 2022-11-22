@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { ClientBasic } from "../models/client";
 import { dropDownOption } from "../models/dropDownOption";
@@ -6,9 +6,21 @@ import { dropDownOption } from "../models/dropDownOption";
 export default class CommonStore {
 
     clientsNames: ClientBasic[] = [];
+    token: string | null = window.localStorage.getItem('jwt');
 
     constructor() {
         makeAutoObservable(this);
+
+        reaction( 
+            () => this.token,
+            token => {
+                if (token) {
+                    window.localStorage.setItem('jwt', token)
+                } else {
+                    window.localStorage.removeItem('jwt');
+                }
+            }
+        )
     }
 
     loadClientsName = async () => {
@@ -24,17 +36,16 @@ export default class CommonStore {
         }
     }
 
-    get clientsNamesOptions() { 
-        let names: dropDownOption < string > [] =[];
+    get clientsNamesOptions() {
+        let names: dropDownOption<string>[] = [];
         this.clientsNames.forEach((cn => {
             names.push({ text: cn.name, value: cn.id })
         }))
         return names;
     }
 
-    // writeClientsNameOptions = (clients: ClientBasic[]) => { 
-    //     clients.forEach((cn => {
-    //         this.clientsNamesOptions.push({ text: cn.name, value: cn.id })
-    //     }))
-    // }
+    setToken = (token: string | null) => {
+        this.token = token;
+    }
+
 }

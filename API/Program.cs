@@ -35,11 +35,12 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddControllers(opt => 
-    {
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-    opt.Filters.Add(new AuthorizeFilter(policy));
-    })
+builder.Services.AddControllers(//opt => 
+//    {
+//        var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+//        opt.Filters.Add(new AuthorizeFilter(policy));
+//    }
+    )
     .AddJsonOptions(x =>
      x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 

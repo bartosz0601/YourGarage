@@ -9,11 +9,11 @@ import MyTextInput from "../../common/form/MyTextInput";
 import MyTextArea from "../../common/form/MyTextArea";
 import { observer } from 'mobx-react-lite';
 
-interface Props { 
-    extraSubmitFuncion?: (text:string) => void,
+interface Props {
+    extraSubmitFuncion?: (text: string) => void,
 }
 
-export default observer( function ClientForm(props: Props) {
+export default observer(function ClientForm(props: Props) {
 
     const { clientStore, modalStore } = useStore();
     const { editingClient, updateClient, createClient } = clientStore;
@@ -39,25 +39,30 @@ export default observer( function ClientForm(props: Props) {
     }
 
     return (
-        <Segment clearing>
-            {editingClient.id ? <Header>Edit client</Header> : <Header>Create client</Header>}
-            <Formik
-                initialValues={editingClient}
-                validationSchema={validationSchema}
-                onSubmit={values => handleFormSubmit(values)}>
-                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <MyTextInput name='firstName' placeholder='First name' label='First name' />
-                        <MyTextInput name='lastName' placeholder='Last name' label='Last name' />
-                        <MyTextInput name='email' placeholder='example@example.pl' label='Email address' />
-                        <MyTextInput name='phone' placeholder='xxxxxxxxx' label='Phone number'/>
-                        <MyTextArea rows={3} placeholder='Details' name='details' label="Details" />
-                        <Button
-                            disabled={isSubmitting || !dirty || !isValid}
-                            loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
-                        <Button floated='right' type='button' content='Cancel' onClick={() => modalStore.closeModal()} />
-                    </Form>
-                )}
-            </Formik>
-        </Segment>)
+        // <Segment clearing>
+
+        <Formik
+            initialValues={editingClient}
+            validationSchema={validationSchema}
+            onSubmit={values => handleFormSubmit(values)}>
+            {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+                    {editingClient.id ? <Header>Edit client</Header> : <Header>Create client</Header>}
+                    <MyTextInput name='firstName' placeholder='First name' label='First name' />
+                    <MyTextInput name='lastName' placeholder='Last name' label='Last name' />
+                    <MyTextInput name='email' placeholder='example@example.pl' label='Email address' />
+                    <MyTextInput name='phone' placeholder='xxxxxxxxx' label='Phone number' />
+                    <MyTextArea rows={3} placeholder='Details' name='details' label="Details" />
+                    <Button
+                        disabled={isSubmitting || !dirty || !isValid}
+                        loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
+                    <Button
+                        floated='right' type='button' content='Cancel'
+                        onClick={() => modalStore.closeModal()}
+                        style={{ marginBottom: '10px' }} />
+                </Form>
+            )}
+        </Formik>
+        // </Segment>
+    )
 })
