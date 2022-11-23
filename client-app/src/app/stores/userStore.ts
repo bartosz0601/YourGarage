@@ -1,5 +1,5 @@
 import { User, UserFormValues } from "../models/user";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { store } from "./store";
 
@@ -8,7 +8,15 @@ export default class UserStore {
 
     constructor() {
         makeAutoObservable(this)
+        reaction(
+            () => this.user?.username,
+            () => {
+                store.clientStore.initClients();
+                store.carStore.initCars();
+                store.serviceStore.initServices();
+            })
     }
+    
 
     get isLoggedIn() {
         return !!this.user;

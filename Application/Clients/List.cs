@@ -1,9 +1,13 @@
 ﻿using Application.Cars;
 using Application.Core;
+using Application.Interfaces;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System.Security.Claims;
 
 namespace Application.Clients
 {
@@ -15,13 +19,17 @@ namespace Application.Clients
         public class Handler : IRequestHandler<Query, Result<PagedList<Client>>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
             public async Task<Result<PagedList<Client>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Clients.OrderBy(c => c.LastName).Include(c => c.Cars).AsQueryable();
+                var userId =  _userAccessor.GetUserId();
+                var query = _context.Clients.Where(c => c.AppUserId == userId).OrderBy(c => c.LastName).Include(c => c.Cars).AsQueryable();
 
                 if (request.Params.SearchParam != null)
                 {

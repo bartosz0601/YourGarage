@@ -1,5 +1,6 @@
 body {
-  background-color: rgba(0, 0, 0, .25) !important;
+  background-color: #F7F9F9 !important;
+  /* color: rgb(201, 201, 201) !important; */
 }
 
 code {
@@ -7,17 +8,23 @@ code {
     monospace;
 }
 
-.ui.inverted.menu{
+.ui.inverted.menu {
   font-size: large;
 }
 
-.ui.items{
-  background-color:rgb(201, 201, 201);
+.ui.items {
+  background-color: white;
   border-radius: 10px;
   padding: 5px;
 }
 
-.ui.menu{
-margin-top: 0px !important;
-background-color: #383838 !important;
+.ui.menu {
+  margin-top: 0px !important;
+}
+
+.startpage {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 80vh !important;
 }

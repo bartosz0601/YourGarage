@@ -8,15 +8,15 @@ import RegisterForm from '../users/RegisterForm';
 
 export default observer(function HomePage() {
 
-    const { serviceStore, carStore,userStore} = useStore();
+    const { serviceStore, carStore, userStore, clientStore} = useStore();
 
-    const [serviceStatistics, setServiceStatistics] = useState<Number[]>([]);
-    const [carsAmount, setCarsAmout] = useState<Number>();
-    const [clientAmount, setClientAmout] = useState<Number>();
+    const [serviceStatistics, setServiceStatistics] = useState<number[]>([]);
+    const [carsAmount, setCarsAmout] = useState<number>();
+    const [clientAmount, setClientAmout] = useState<number>();
 
     useEffect(() => {
         serviceStore.loadStatistics().then((result) => {
-            setServiceStatistics(result as Number[]);
+            setServiceStatistics(result as number[]);
         });
     }, [serviceStore.loadStatistics])
 
@@ -27,7 +27,7 @@ export default observer(function HomePage() {
     }, [carStore.loadAmount])
 
     useEffect(() => {
-        carStore.loadAmount().then((result) => {
+        clientStore.loadAmount().then((result) => {
             setClientAmout(result);
         })
     }, [carStore.loadAmount])
@@ -41,7 +41,7 @@ export default observer(function HomePage() {
                         <Header as='h1'>Hello {userStore.user?.username}! <br/> Manage your workshop!</Header>
                     </Grid.Column>
                 </Grid.Row>
-                {serviceStatistics.length > 0 && carsAmount && clientAmount ?
+                {serviceStatistics.length > 0 && !isNaN(carsAmount!) && !isNaN(clientAmount!) ?
                     <>
                         <Grid.Row verticalAlign='middle'>
                             <Grid.Column width={7}>
@@ -75,7 +75,7 @@ export default observer(function HomePage() {
                             <Grid.Column width={9} textAlign='center'>
                                 <Statistic.Group>
                                     <Statistic
-                                        value={carsAmount.toString()}
+                                        value={carsAmount!.toString()}
                                         label="Total">
                                     </Statistic>
                                 </Statistic.Group>
@@ -88,7 +88,7 @@ export default observer(function HomePage() {
                             <Grid.Column width={9} textAlign='center'>
                                 <Statistic.Group>
                                     <Statistic
-                                        value={clientAmount.toString()}
+                                        value={clientAmount!.toString()}
                                         label="Total">
                                     </Statistic>
                                 </Statistic.Group>

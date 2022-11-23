@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,18 +18,22 @@ namespace Application.Sevices
         public class Handler : IRequestHandler<Query, Result<List<int>>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
             public async Task<Result<List<int>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var userId = _userAccessor.GetUserId();
                 var response = new List<int>();
-                response.Add(await _context.Services.CountAsync());
+                var query = _context.Services.Where(s => s.Car.Client.AppUserId == userId).AsQueryable();
+                response.Add(await query.CountAsync());
 
                 foreach (var date in request.DateTimes)
                 {
-                    response.Add(await _context.Services.Where(s => s.Date >= date).CountAsync());
+                    response.Add(await query.Where(s => s.Date >= date).CountAsync());
                 }
                 return Result<List<int>>.Success(response);
             }

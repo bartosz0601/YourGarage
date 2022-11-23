@@ -57,7 +57,7 @@ export default observer(function App() {
           <Route path='/createService' element={<PrivateRoute><ServiceForm /> </PrivateRoute>} />
           <Route path='/editService/:id' element={<PrivateRoute><ServiceForm /> </PrivateRoute>} />
           <Route path='/cars' element={<PrivateRoute><CarsPage /></PrivateRoute >} />
-          <Route path='/cars/:id' element={<PrivateRoute><CarDetails /> </PrivateRoute >} />
+          <Route path='/cars/:id'  element={<PrivateRoute><CarDetails /> </PrivateRoute >} />
           <Route path='/clients' element={<PrivateRoute><ClientPage /></PrivateRoute >} />
           <Route path='/not-found' element={<PrivateRoute><NotFound /></PrivateRoute >} />
           <Route path='*' element={<Navigate to="/not-found" />} />
