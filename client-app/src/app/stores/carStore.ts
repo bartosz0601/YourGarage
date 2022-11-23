@@ -40,6 +40,12 @@ export default class CarStore {
         this.searchParam = text;
     }
 
+    initCars = () => { 
+        this.pagingParams = new PagingParams();
+        this.carsRegister.clear();
+        this.searchParam = "";
+    }
+
     get cars() {
         return Array.from(this.carsRegister.values());
     }

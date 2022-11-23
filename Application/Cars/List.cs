@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +15,16 @@ namespace Application.Cars
         public class Handler : IRequestHandler<Query, Result<PagedList<Car>>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
             public async Task<Result<PagedList<Car>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Cars.OrderBy(c => c.Brand).AsQueryable();
+                var userId = _userAccessor.GetUserId();
+                var query = _context.Cars.Where(c => c.Client.AppUserId == userId).OrderBy(c => c.Brand).AsQueryable();
 
                 if (request.Params.SearchParam != null)
                 {

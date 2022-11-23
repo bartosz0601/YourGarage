@@ -3,6 +3,8 @@ import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
 import { v4 as uuid } from 'uuid';
 import { Pagination, PagingParams } from "../models/pagination";
+import UserStore from './userStore';
+import { store } from './store';
 
 export default class ClientStore {
 
@@ -16,7 +18,7 @@ export default class ClientStore {
     constructor() {
         makeAutoObservable(this);
         reaction(
-            () => { return this.searchParam },
+            () => { return this.searchParam},
             () => {
                 this.pagingParams = new PagingParams();
                 this.clientsRegister.clear();
@@ -33,6 +35,12 @@ export default class ClientStore {
             if (aName < bName) { return -1 }
             return 0;
         });
+    }
+
+    initClients = () => { 
+        this.pagingParams = new PagingParams();
+        this.clientsRegister.clear();
+        this.searchParam = "";
     }
 
     setPagingParams = (pagingParams: PagingParams) => {

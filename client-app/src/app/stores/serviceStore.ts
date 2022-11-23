@@ -49,6 +49,12 @@ export default class ServiceStore {
         this.endDate = endDate;
     }
 
+    initServices = () => {
+        this.pagingParams = new PagingParams();
+        this.servicesRegister.clear();
+        this.setDates(this.GetPastDate(30), new Date());
+    }
+
     get services() {
         return Array.from(this.servicesRegister.values());
     }

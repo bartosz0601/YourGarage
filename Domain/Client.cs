@@ -15,6 +15,8 @@ namespace Domain
         [Required]
         public string Phone { get; set; }
         public string Details { get; set; }
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
         public ICollection<Car> Cars { get; set; }
     }
 }

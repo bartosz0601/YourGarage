@@ -9,10 +9,10 @@ import { PagingParams } from '../../app/models/pagination';
 
 export default observer(function ClientPage() {
 
-    const { clientStore, modalStore } = useStore();
-    const { clients, loadClients, initFormClient, pagination,
+    const { clientStore, modalStore} = useStore();
+    const { clients, loadClients, initFormClient, pagination, 
         setPagingParams, setSearchParam, searchParam, loadingInitial } = clientStore
-
+    
     useEffect(() => {
         if (clients.length < 1) loadClients();
     }, [loadClients])

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{45AB5010-283B-4409-B7DA-8D245221C00D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{45AB5010-283B-4409-B7DA-8D245221C00D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{40E08277-DC9D-46FD-A802-B83CC49B8C73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{40E08277-DC9D-46FD-A802-B83CC49B8C73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{39896471-C5E5-41B4-A4C2-0CA4F2EC1AD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{39896471-C5E5-41B4-A4C2-0CA4F2EC1AD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{F9404043-16A4-4FA9-890E-3663422541CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{F9404043-16A4-4FA9-890E-3663422541CF}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-app", "client-app\client-app.esproj", "{01F3FFE9-7A76-4EC4-AC5E-DCEF123F59EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{E5960165-BE5B-4845-9801-0C37B51F22A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{01F3FFE9-7A76-4EC4-AC5E-DCEF123F59EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01F3FFE9-7A76-4EC4-AC5E-DCEF123F59EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01F3FFE9-7A76-4EC4-AC5E-DCEF123F59EE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E5960165-BE5B-4845-9801-0C37B51F22A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5960165-BE5B-4845-9801-0C37B51F22A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5960165-BE5B-4845-9801-0C37B51F22A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5960165-BE5B-4845-9801-0C37B51F22A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

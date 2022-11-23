@@ -9,6 +9,6 @@ namespace Domain
 {
     public class AppUser : IdentityUser
     {
-        public ICollection<Client> Clients { get; set; }
+        //public ICollection<Client> Clients { get; set; }
     }
 }
