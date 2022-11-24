@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Container, Grid, Header, Icon, Input, Loader } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Input, Loader, Ref, Sticky } from 'semantic-ui-react';
 import CarsList from './CarsList';
 import CarForm from './CarForm';
 import { useStore } from '../../app/stores/store';
@@ -12,6 +12,7 @@ export default observer(function CarsPage() {
     const { cars, loadCars, initFormCar, pagination, setPagingParams,
         setSearchParam, searchParam, loadingInitial } = carStore;
     const { loadClientsName } = commonStore;
+    const contextRef = useRef(null);
 
     useEffect(() => {
         loadClientsName();
@@ -31,57 +32,65 @@ export default observer(function CarsPage() {
     }
 
     return (
-        <Container style={{height:'100vh'}}>
+        <Container style={{ height: '100vh' }}>
             <Grid columns={3} padded>
-                <Grid.Column width={2}>
-                    <Button animated='vertical' size='big' color='black' type='button' fluid
-                        onClick={() => {
-                            initFormCar();
-                            modalStore.openModal(<CarForm />)
-                        }}>
-                        <Button.Content visible>Add</Button.Content>
-                        <Button.Content hidden>
-                            <Icon name='plus square outline'></Icon>
-                        </Button.Content>
-                    </Button>
-                </Grid.Column>
-                <Grid.Column width={10}>
-                    {(!loadingInitial || loadingNext) &&
-                        <>{
-                            cars.length > 0 ?
-                                <InfiniteScroll
-                                    pageStart={0}
-                                    initialLoad={false}
-                                    loadMore={handleGetNext}
-                                    hasMore={!!pagination && pagination.currentPage < pagination.totalPages && !loadingNext}
+                <Ref innerRef={contextRef}>
+                    <>
+                        <Grid.Column width={2}>
+                            <Sticky context={contextRef} offset={20}>
+                                <Button animated='vertical' size='big' color='black' type='button' fluid
+                                    onClick={() => {
+                                        initFormCar();
+                                        modalStore.openModal(<CarForm />)
+                                    }}>
+                                    <Button.Content visible>Add</Button.Content>
+                                    <Button.Content hidden>
+                                        <Icon name='plus square outline'></Icon>
+                                    </Button.Content>
+                                </Button>
+                            </Sticky>
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            {(!loadingInitial || loadingNext) &&
+                                <>{
+                                    cars.length > 0 ?
+                                        <InfiniteScroll
+                                            pageStart={0}
+                                            initialLoad={false}
+                                            loadMore={handleGetNext}
+                                            hasMore={!!pagination && pagination.currentPage < pagination.totalPages && !loadingNext}
+                                        >
+                                            <CarsList />
+                                        </InfiniteScroll>
+                                        :
+                                        <Header size='large' textAlign='center' >No results</Header>
+                                }
+                                </>
+                            }
+                        </Grid.Column>
+                        <Grid.Column width={4}>
+                            <Sticky context={contextRef} offset={20}>
+                                <Input fluid icon='search' size='large' placeholder='Brand, model, vin...'
+                                    defaultValue={searchLocal}
+                                    onChange={(e, data) => {
+                                        setSearchLocal(data.value);
+                                    }} />
+                                <Button floated='right' color='black' type='button' size='large'
+                                    style={{ marginTop: "10px" }}
+                                    onClick={
+                                        () => setSearchParam(searchLocal)
+                                    }
                                 >
-                                    <CarsList />
-                                </InfiniteScroll>
-                                :
-                                <Header size='large' textAlign='center' >No results</Header>
-                        }
-                        </>
-                    }
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    <Input fluid icon='search' size='large' placeholder='Write brand, model, vin...'
-                        defaultValue={searchLocal}
-                        onChange={(e, data) => {
-                            setSearchLocal(data.value);
-                        }} />
-                    <Button floated='right' color='black' type='button' size='large'
-                        style={{ marginTop: "10px" }}
-                        onClick={
-                            () => setSearchParam(searchLocal)
-                        }
-                    >
-                        Search
-                    </Button>
-                </Grid.Column>
-                <Grid.Column width={14}>
-                    <Loader active={loadingNext || loadingInitial} />
-                </Grid.Column>
+                                    Search
+                                </Button>
+                            </Sticky>
+                        </Grid.Column>
+                        <Grid.Column width={14}>
+                            <Loader style={{ marginTop: '20px' }} active={loadingNext || loadingInitial} />
+                        </Grid.Column>
+                    </>
+                </Ref>
             </Grid>
-        </Container>
+        </Container >
     )
 })

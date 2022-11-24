@@ -35,14 +35,14 @@ export default observer(function RegisterForm(props: Props) {
         >
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h2' content='Sign up to YourGarage' color='teal' textAlign='center' />
+                    <Header as='h2' content='Sign up to YourGarage' textAlign='center' />
                     <MyTextInput name='username' placeholder='Username' />
                     <MyTextInput name='email' placeholder='Email' />
                     <MyTextInput name='password' placeholder='Password' type='password' />
                     <ErrorMessage
                         name='error' render={() => <ValidationErrors errors={errors.error} />}
                     />
-                    <Button disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} positive content='Register' type='submit' fluid />
+                    <Button disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} color='black' content='Register' type='submit' fluid />
                 </Form>
             )}
         </Formik>

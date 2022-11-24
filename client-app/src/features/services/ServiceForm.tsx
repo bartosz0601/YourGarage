@@ -104,7 +104,7 @@ export default observer(function ServiceForm() {
                                             }} />
                                     </Grid.Column>
                                     <Grid.Column width={3}>
-                                        <Button floated='right' content='Create new' color='green' type='button' fluid
+                                        <Button floated='right' content='Create new' color='black' type='button' fluid
                                             onClick={() => {
                                                 clientStore.initFormClient();
                                                 modalStore.openModal(<ClientForm extraSubmitFuncion={(id: string) => {
@@ -145,7 +145,7 @@ export default observer(function ServiceForm() {
                                             options={carsNamesOptions} loading={loadingClient} />
                                     </Grid.Column>
                                     <Grid.Column width={3}>
-                                        <Button floated='right' content='Create new' color='green' type='button' disabled={!values.clientId} fluid
+                                        <Button floated='right' content='Create new' color='black' type='button' disabled={!values.clientId} fluid
                                             onClick={() => {
                                                 carStore.initFormCar(values.clientId);
                                                 modalStore.openModal(<CarForm disableClient={true} extraSubmitFuncion={() => readClient(service.clientId, false)} />);
@@ -174,7 +174,7 @@ export default observer(function ServiceForm() {
 
                             <Button
                                 disabled={isSubmitting || !dirty || !isValid}
-                                loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
+                                loading={isSubmitting} floated='right' color='black' type='submit' content='Submit' />
                             <Button floated='right' type='button' content='Cancel'
                                 onClick={() => navigate('/services')} />
                         </Form>

@@ -55,7 +55,7 @@ export default observer(function ClientForm(props: Props) {
                     <MyTextArea rows={3} placeholder='Details' name='details' label="Details" />
                     <Button
                         disabled={isSubmitting || !dirty || !isValid}
-                        loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
+                        loading={isSubmitting} floated='right' color='black' type='submit' content='Submit' />
                     <Button
                         floated='right' type='button' content='Cancel'
                         onClick={() => modalStore.closeModal()}

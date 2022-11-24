@@ -18,12 +18,12 @@ export default observer(function StartPage() {
 
     return (
         <Container className='startpage'>
-            <Segment size='big' textAlign='center' >
+            <Segment size='massive' textAlign='center' >
                 <Header as='h1'>Welcome on YourGarage</Header>
                 {!userStore.isLoggedIn &&
                     <Grid columns={2}>
                         <Grid.Column >
-                            <Button fluid size='big' color='black' type='button'
+                            <Button fluid size='large' color='black' type='button'
                                 onClick={() => {
                                     modalStore.openModal(<LoginForm
                                         extraSubmitFuncion={() => {
@@ -37,7 +37,7 @@ export default observer(function StartPage() {
                             </Button>
                         </Grid.Column>
                         <Grid.Column>
-                            <Button fluid size='big' color='black' type='button'
+                            <Button fluid size='large' color='black' type='button'
                                 onClick={() => {
                                     modalStore.openModal(<RegisterForm
                                         extraSubmitFuncion={() => {

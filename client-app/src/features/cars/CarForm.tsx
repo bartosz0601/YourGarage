@@ -64,7 +64,7 @@ export default observer(function CarForm(props: Props) {
                         options={clientsNamesOptions} disabled={props.disableClient} />
                     <Button
                         disabled={isSubmitting || !dirty || !isValid}
-                        loading={isSubmitting} floated='right' positive type='submit' content='Submit' />
+                        loading={isSubmitting} floated='right' color='black' type='submit' content='Submit' />
                     <Button floated='right' type='button' content='Cancel'
                         onClick={() => modalStore.closeModal()}
                         style={{ marginBottom: '10px' }} />

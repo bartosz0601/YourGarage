@@ -14,7 +14,6 @@ export default observer(function LoginForm(props: Props) {
     return (
         <Formik
             initialValues={{ username: '', password: '', error: null }}
-
             onSubmit={(values, actions) => {
                 userStore.login(values)
                     .catch(error => {
@@ -27,7 +26,7 @@ export default observer(function LoginForm(props: Props) {
             }
             }>
 
-            {({ handleSubmit, isSubmitting, errors }) => (
+            {({ handleSubmit, isSubmitting, errors, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h2' content='Login to YourGarage' textAlign='center' />
                     <MyTextInput name='username' placeholder='Username' />
@@ -36,7 +35,7 @@ export default observer(function LoginForm(props: Props) {
                         name='error' render={() =>
                             <Label style={{ marginBottom: 10 }} basic color='red' content={errors.error} />}
                     />
-                    <Button loading={isSubmitting} positive content='Login' type='submit' fluid />
+                    <Button loading={isSubmitting} color='black' content='Login' type='submit' fluid/>
                 </Form>
             )}
         </Formik>

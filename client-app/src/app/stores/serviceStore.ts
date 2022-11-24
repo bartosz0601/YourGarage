@@ -144,6 +144,9 @@ export default class ServiceStore {
     updateService = async (service: ServiceFormValues) => {
         try {
             await agent.Services.update(service);
+            runInAction(() => {
+                this.servicesRegister.set(service.id!, service as Service);
+            })
         } catch (error) {
             console.log(error);
         }

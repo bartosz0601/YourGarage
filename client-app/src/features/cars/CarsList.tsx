@@ -31,7 +31,10 @@ export default observer(function CarsList() {
             />
             <List>
                 {cars.map(car =>
-                    <CarsListItem key={car.id} car={car} clientName={getClientName(car.clientId, clientsNames)} deleteHandle={deleteHandle} />
+                    <CarsListItem key={car.id} car={car}
+                        clientName={getClientName(car.clientId, clientsNames)}
+                        deleteHandle={deleteHandle}
+                    />
                 )}
             </List>
         </>

@@ -12,12 +12,6 @@ code {
   font-size: large;
 }
 
-.ui.items {
-  background-color: white;
-  border-radius: 10px;
-  padding: 5px;
-}
-
 .ui.menu {
   margin-top: 0px !important;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { Button, Grid, Icon, Item, Segment } from 'semantic-ui-react';
+import { Button, Container, Grid, GridColumn, Icon, Item, Label, List, Segment } from 'semantic-ui-react';
 import { Service } from '../../app/models/service';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../app/stores/store';
@@ -14,44 +14,55 @@ interface Props {
 export default observer(function ServiceListItem({ service, deleteHandle }: Props) {
 
     return (
-        <Item.Group >
-            <Item>
-                <Item.Content>
-                    <Item.Header fixed='left'>
-                        <Icon name='car' />
-                        <Link to={'/cars/' + service.carId}>{service.carName}</Link>
-                        <Icon name='user' style={{ marginLeft: '20px' }} />
-                        {service.clientName}
-                    </Item.Header>
-                    <Item.Meta>
-                        <Icon name='calendar alternate' />
-                        {format(new Date(service.date!), 'MMMM d, yyyy h:mm aa')}
-
-                        <Icon name='money' style={{ marginLeft: '20px' }} />
-                        {service.price.toString()}zł
-
-                        <Icon name='clock outline' style={{ marginLeft: '20px' }} />
-                        {service.time.toString()}h
-                    </Item.Meta>
-                    <Item.Description>
-                        {service.actions}
-                    </Item.Description>
-                    <Item.Extra>
-                        <>
-                            Mileage: {service.mileage}km
-                        </>
-                    </Item.Extra>
-                    <Button floated='right' color='red' 
-                        onClick={() => deleteHandle(service.id)}
-                    >
-                        Delete
-                    </Button>
-                    <Button floated='right' color='blue'
-                        as={Link} to={'/editService/' + service.id}>
-                        Edit
-                    </Button>
-                </Item.Content>
-            </Item>
-        </Item.Group>
+        <Segment>
+            <Item.Group >
+                <Item>
+                    <Item.Content>
+                        <Item.Header as={Link} to={'/cars/' + service.carId}>
+                            <Icon name='car' />
+                            {service.carName}
+                        </Item.Header>
+                        <Item.Meta>
+                            <List horizontal>
+                                <List.Item>
+                                    <Icon name='calendar alternate' />
+                                    {" " + format(new Date(service.date!), 'MMMM d, yyyy h:mm aa')}
+                                </List.Item>
+                                <List.Item>
+                                    <Icon name='money' />
+                                    {" " + service.price.toString()}zł
+                                </List.Item>
+                                <List.Item>
+                                    <Icon name='clock outline' />
+                                    {" " + service.time.toString()}h
+                                </List.Item>
+                                <List.Item>
+                                    <Icon name='tachometer alternate' />
+                                    {" " + service.mileage.toString()}km
+                                </List.Item>
+                            </List>
+                        </Item.Meta>
+                        <Item.Description>
+                            {service.actions}
+                        </Item.Description>
+                        <Item.Extra>
+                            <Label size='large'>
+                                <Icon name='user'></Icon>
+                                {service.clientName}
+                            </Label>
+                        </Item.Extra>
+                        <Button floated='right' color='blue'
+                            onClick={() => deleteHandle(service.id)}
+                        >
+                            Delete
+                        </Button>
+                        <Button floated='right'
+                            as={Link} to={'/editService/' + service.id}>
+                            Edit
+                        </Button>
+                    </Item.Content>
+                </Item>
+            </Item.Group >
+        </Segment>
     )
 })
