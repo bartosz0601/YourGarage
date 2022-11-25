@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../app/stores/store';
 import { useParams } from 'react-router-dom';
-import { Card, Container, Grid, Icon, Item, Label, List, Loader, Segment } from 'semantic-ui-react';
+import { Card, Container, Grid, Icon, Item, Label, List, Loader, Popup, Segment } from 'semantic-ui-react';
 import CarServiceListIem from './CarServiceListIem';
 import CarsListItem from './CarsListItem';
+import ClientCard from '../clients/ClientCard';
 
 export default observer(function CarDetails() {
     const { carStore } = useStore();
@@ -45,10 +46,18 @@ export default observer(function CarDetails() {
                                         </List.Item>
                                         <List.Item>
                                             <Item.Meta>
-                                                <Label size='large'>
-                                                    <Icon name='user'></Icon>
-                                                    {car?.client!.firstName + ' ' + car?.client!.lastName}
-                                                </Label>
+                                                <Popup hoverable
+                                                    trigger={
+                                                        <Label size='large'>
+                                                            <Icon name='user'></Icon>
+                                                            {car?.client!.firstName + ' ' + car?.client!.lastName}
+                                                        </Label>
+                                                    }
+                                                >
+                                                    <Popup.Content>
+                                                        <ClientCard id={car!.clientId} />
+                                                    </Popup.Content>
+                                                </Popup>
                                             </Item.Meta>
                                         </List.Item>
                                     </List>

@@ -9,8 +9,10 @@ import { store } from './store';
 export default class ClientStore {
 
     loadingInitial = false;
+    loadingClient = false;
     clientsRegister = new Map<string, Client>();
     editingClient = new ClientFormValues();
+    client: Client | null = null;
     pagingParams = new PagingParams();
     pagination: Pagination | null = null;
     searchParam: string = "";
@@ -18,7 +20,7 @@ export default class ClientStore {
     constructor() {
         makeAutoObservable(this);
         reaction(
-            () => { return this.searchParam},
+            () => { return this.searchParam },
             () => {
                 this.pagingParams = new PagingParams();
                 this.clientsRegister.clear();
@@ -37,7 +39,7 @@ export default class ClientStore {
         });
     }
 
-    initClients = () => { 
+    initClients = () => {
         this.pagingParams = new PagingParams();
         this.clientsRegister.clear();
         this.searchParam = "";
@@ -67,6 +69,10 @@ export default class ClientStore {
         this.loadingInitial = state;
     }
 
+    setLoadingClient(state: boolean) { 
+        this.loadingClient = state;
+    }
+
     setEditingClient = (id: string) => {
         this.editingClient = this.clientsRegister.get(id)!;
     }
@@ -89,6 +95,20 @@ export default class ClientStore {
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
+        }
+    }
+
+    loadClient = async (id: string) => {
+        this.loadingClient = true;
+        try {
+            const result = await agent.Clients.get(id);
+            runInAction(() => {
+                this.client = result;
+            })
+            this.setLoadingClient(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingClient(false);
         }
     }
 

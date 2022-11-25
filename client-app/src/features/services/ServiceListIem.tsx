@@ -1,10 +1,11 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { Button, Container, Grid, GridColumn, Icon, Item, Label, List, Segment } from 'semantic-ui-react';
+import { Button, Container, Grid, GridColumn, Icon, Item, Label, List, Popup, Segment } from 'semantic-ui-react';
 import { Service } from '../../app/models/service';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
+import ClientCard from '../clients/ClientCard';
 
 interface Props {
     service: Service,
@@ -46,10 +47,18 @@ export default observer(function ServiceListItem({ service, deleteHandle }: Prop
                             {service.actions}
                         </Item.Description>
                         <Item.Extra>
-                            <Label size='large'>
-                                <Icon name='user'></Icon>
-                                {service.clientName}
-                            </Label>
+                            <Popup hoverable
+                                trigger={
+                                    <Label size='large'>
+                                        <Icon name='user'></Icon>
+                                        {service.clientName}
+                                    </Label>
+                                }
+                            >
+                                <Popup.Content>
+                                    <ClientCard id={service.clientId} />
+                                </Popup.Content>
+                            </Popup>
                         </Item.Extra>
                         <Button floated='right' color='blue'
                             onClick={() => deleteHandle(service.id)}

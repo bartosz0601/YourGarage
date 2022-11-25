@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Icon, Item, Label, List, Segment } from 'semantic-ui-react';
+import { Button, Icon, Item, Label, List, Popup, PopupContent, Segment } from 'semantic-ui-react';
 import { Car } from '../../app/models/car';
 import { useStore } from '../../app/stores/store';
+import ClientCard from '../clients/ClientCard';
 import CarForm from './CarForm';
 
 interface Props {
@@ -38,10 +39,18 @@ export default observer(function CarsListItem({ car, clientName, deleteHandle }:
                             </List>
                         </Item.Meta>
                         <Item.Extra>
-                            <Label size='large'>
-                                <Icon name='user'></Icon>
-                                {clientName}
-                            </Label>
+                            <Popup hoverable
+                                trigger={
+                                    <Label size='large'>
+                                        <Icon name='user'></Icon>
+                                        {clientName}
+                                    </Label>
+                                }
+                            >
+                                <Popup.Content>
+                                    <ClientCard id={car.clientId} />
+                                </Popup.Content>
+                            </Popup>
                         </Item.Extra>
 
                         <Button floated='right' color='blue'
@@ -55,10 +64,9 @@ export default observer(function CarsListItem({ car, clientName, deleteHandle }:
                             }}>
                             Edit
                         </Button>
-
                     </Item.Content>
                 </Item>
             </Item.Group>
-        </Segment>
+        </Segment >
     )
 })
