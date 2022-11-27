@@ -18,7 +18,6 @@ import PrivateRoute from './PrivateRoute';
 
 export default observer(function App() {
   const { userStore, commonStore } = useStore();
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

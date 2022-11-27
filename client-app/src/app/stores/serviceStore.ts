@@ -10,8 +10,8 @@ export default class ServiceStore {
     servicesRegister = new Map<String, Service>();
     pagingParams = new PagingParams();
     pagination: Pagination | null = null;
-    startDate: Date = this.GetPastDate(30);
-    endDate: Date = new Date();
+    startDate: Date | undefined = this.GetPastDate(30);
+    endDate: Date | undefined = new Date();
 
     constructor() {
         makeAutoObservable(this);
@@ -21,10 +21,12 @@ export default class ServiceStore {
                 return [this.startDate, this.endDate]
             },
             () => {
-                if (this.startDate && this.endDate) {
+                if (this.startDate && this.endDate && 
+                    window.location.href.includes('services')) {                 
                     this.pagingParams = new PagingParams();
                     this.servicesRegister.clear();
                     this.loadServices();
+                    console.log('reaction');
                 }
             }
         )
@@ -67,8 +69,8 @@ export default class ServiceStore {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
-        params.append('startDate', this.startDate.toISOString());
-        params.append('endDate', this.endDate.toISOString());
+        params.append('startDate', this.startDate!.toISOString());
+        params.append('endDate', this.endDate!.toISOString());
         return params;
     }
 
