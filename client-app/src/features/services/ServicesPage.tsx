@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button, Container, Grid, Header, Icon, Loader, Ref, Statistic, Sticky } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
@@ -16,7 +16,7 @@ export default observer(function ServicesPage() {
 
     useEffect(() => {
         if (services.length < 1) loadServices();
-    }, [loadServices]) // empty array - call only once
+    }, [loadServices, services.length]) 
 
     const [loadingNext, setLoadingNext] = useState<boolean>();
 

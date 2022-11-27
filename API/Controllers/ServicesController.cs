@@ -1,16 +1,17 @@
 ﻿using Application.Services;
 using Application.Sevices;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
 
 
 namespace API.Controllers
 {
+    [Authorize]
     public class ServicesController : BaseApiController
     {
         private readonly DataContext _context;
-
         public ServicesController(DataContext context)
         {
             _context = context;
@@ -22,6 +23,7 @@ namespace API.Controllers
             return HandlePagedResult(await Mediator.Send(new List.Query {Params = param }));
         }
 
+        [Authorize(Policy = "UserOwner")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -40,6 +42,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Create.Command { Service = service }));
         }
 
+        [Authorize(Policy = "UserOwner")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(Guid id, [FromBody] Service service)
         {
@@ -47,6 +50,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command { Service = service }));
         }
 
+        [Authorize(Policy = "UserOwner")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

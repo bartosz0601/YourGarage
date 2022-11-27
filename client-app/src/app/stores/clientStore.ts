@@ -3,8 +3,6 @@ import { Client, ClientFormValues } from '../models/client';
 import agent from '../api/agent'
 import { v4 as uuid } from 'uuid';
 import { Pagination, PagingParams } from "../models/pagination";
-import UserStore from './userStore';
-import { store } from './store';
 
 export default class ClientStore {
 
@@ -69,7 +67,7 @@ export default class ClientStore {
         this.loadingInitial = state;
     }
 
-    setLoadingClient(state: boolean) { 
+    setLoadingClient(state: boolean) {
         this.loadingClient = state;
     }
 
@@ -127,7 +125,9 @@ export default class ClientStore {
             client.id = uuid();
             await agent.Clients.create(client);
             runInAction(() => {
-                this.clientsRegister.set(client.id!, client as Client);
+                if (this.clientsRegister.size > 0) {
+                    this.clientsRegister.set(client.id!, client as Client);
+                }
             })
             return client.id;
         } catch (error) {
@@ -139,7 +139,9 @@ export default class ClientStore {
         try {
             await agent.Clients.update(client);
             runInAction(() => {
-                this.clientsRegister.set(client.id!, client as Client);
+                if (this.clientsRegister.size > 0) {
+                    this.clientsRegister.set(client.id!, client as Client);
+                }
             })
         } catch (error) {
             console.log(error);

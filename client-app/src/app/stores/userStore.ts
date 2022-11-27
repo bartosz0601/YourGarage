@@ -11,12 +11,14 @@ export default class UserStore {
         reaction(
             () => this.user?.username,
             () => {
-                store.clientStore.initClients();
-                store.carStore.initCars();
-                store.serviceStore.initServices();
+                if (this.user?.username) {
+                    store.clientStore.initClients();
+                    store.carStore.initCars();
+                    store.serviceStore.initServices();
+                }
             })
     }
-    
+
 
     get isLoggedIn() {
         return !!this.user;

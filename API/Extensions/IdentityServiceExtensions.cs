@@ -1,5 +1,6 @@
 ﻿using API.Services;
 using Domain;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +38,13 @@ namespace API.Extensions
 
             //Add JWTtoken
             services.AddScoped<TokenService>();
+
+            services.AddAuthorization(opt => {
+                opt.AddPolicy("UserOwner", policy =>
+                {
+                    policy.Requirements.Add(new UserOwnerRequirement());
+                });
+            });
 
             return services;
         }

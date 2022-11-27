@@ -54,6 +54,8 @@ builder.Services.AddIdentityService(builder.Configuration);
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
+builder.Services.AddTransient<IAuthorizationHandler, UserOwnerHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

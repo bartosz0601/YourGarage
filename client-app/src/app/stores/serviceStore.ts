@@ -56,7 +56,11 @@ export default class ServiceStore {
     }
 
     get services() {
-        return Array.from(this.servicesRegister.values());
+        return Array.from(this.servicesRegister.values()).sort((a, b) => {
+            if (a.date! < b.date!) { return 1 }
+            if (a.date! > b.date!) { return -1 }
+            return 0;
+        });
     }
 
     get axiosParams() {
@@ -132,20 +136,23 @@ export default class ServiceStore {
         }
     }
 
-    createService = async (service: ServiceFormValues) => {
+    createService = async (service: ServiceFormValues, clientName: string, carName: string) => {
         try {
             service.id = uuid();
             await agent.Services.create(service);
+            runInAction(() => {
+                this.servicesRegister.set(service.id!, { ...service as Service, clientName: clientName, carName: carName });
+            })
         } catch (error) {
             console.log(error);
         }
     }
 
-    updateService = async (service: ServiceFormValues) => {
+    updateService = async (service: ServiceFormValues, clientName: string, carName: string) => {
         try {
             await agent.Services.update(service);
             runInAction(() => {
-                this.servicesRegister.set(service.id!, service as Service);
+                this.servicesRegister.set(service.id!, { ...service as Service, clientName: clientName, carName: carName});
             })
         } catch (error) {
             console.log(error);

@@ -40,14 +40,20 @@ export default class CarStore {
         this.searchParam = text;
     }
 
-    initCars = () => { 
+    initCars = () => {
         this.pagingParams = new PagingParams();
         this.carsRegister.clear();
         this.searchParam = "";
     }
 
     get cars() {
-        return Array.from(this.carsRegister.values());
+        return Array.from(this.carsRegister.values()).sort((a, b) => {
+            let abrand = a.brand.toUpperCase();
+            let bbrand = b.brand.toUpperCase();
+            if (abrand > bbrand) { return 1 }
+            if (abrand < bbrand) { return -1 }
+            return 0;
+        });
     }
 
     get axiosParams() {
@@ -125,6 +131,12 @@ export default class CarStore {
         try {
             car.id = uuid();
             await agent.Cars.create(car);
+            runInAction(() => {
+                if (this.carsRegister.size > 0) {
+                    this.carsRegister.set(car.id!, car as Car);
+                }
+            })
+            return car.id;
         } catch (error) {
             console.log(error);
         }
@@ -134,7 +146,9 @@ export default class CarStore {
         try {
             await agent.Cars.update(car);
             runInAction(() => {
-                this.carsRegister.set(car.id!, car as Car);
+                if (this.carsRegister.size > 0) {
+                    this.carsRegister.set(car.id!, car as Car);
+                }
             })
         } catch (error) {
             console.log(error);

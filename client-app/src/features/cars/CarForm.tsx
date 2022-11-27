@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Header, Segment } from 'semantic-ui-react';
+import { Button, Header } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
 import MyTextInput from '../../common/form/MyTextInput';
@@ -40,8 +40,8 @@ export default observer(function CarForm(props: Props) {
             updateCar(car).then(() => modalStore.closeModal());
 
         } else {
-            createCar(car).then(() => {
-                if (props.extraSubmitFuncion) props.extraSubmitFuncion();
+            createCar(car).then((id) => {
+                if (props.extraSubmitFuncion) props.extraSubmitFuncion(id);
                 modalStore.closeModal();
 
             });

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
 import ModalContainer from '../../common/modals/ModalContainer';
@@ -12,16 +12,13 @@ import HomePage from '../../features/home/HomePage';
 import StartPage from '../../features/home/StartPage';
 import ServiceForm from '../../features/services/ServiceForm';
 import ServicesPage from '../../features/services/ServicesPage';
-import CommonStore from '../stores/commonStore';
 import { useStore } from '../stores/store';
-import UserStore from '../stores/userStore';
 import NavBar from './NavBar';
 import PrivateRoute from './PrivateRoute';
 
 export default observer(function App() {
   const { userStore, commonStore } = useStore();
 
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

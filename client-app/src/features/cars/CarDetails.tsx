@@ -55,7 +55,7 @@ export default observer(function CarDetails() {
                                                     }
                                                 >
                                                     <Popup.Content>
-                                                        <ClientCard id={car!.clientId} />
+                                                        {car && <ClientCard id={car!.clientId} />}
                                                     </Popup.Content>
                                                 </Popup>
                                             </Item.Meta>

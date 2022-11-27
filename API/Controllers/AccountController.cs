@@ -57,7 +57,7 @@ namespace API.Controllers
                 return ValidationProblem();
             }
 
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))//(x => x.NormalizedUserName == registerDto.UserName.ToUpper()))
+            if (await _userManager.Users.AnyAsync(x => x.NormalizedUserName == registerDto.UserName.ToUpper()))
             {
                 ModelState.AddModelError("username", "Username taken");
                 return ValidationProblem();
@@ -83,11 +83,17 @@ namespace API.Controllers
             return BadRequest("Register error");
         }
 
-        [Authorize] // sprawdzamy token
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email)); // Bierzemy adres email z tokena który przyszedł z zapytanie HTTP get
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            
             return new UserDto
             {
                 Username = user.UserName,

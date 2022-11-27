@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useStore } from '../../app/stores/store';
-import { Button, Grid, GridColumn, GridRow, Header, Icon, Message, Segment, Form, Dimmer, Loader, Placeholder } from 'semantic-ui-react';
+import { Button, Grid, GridColumn, GridRow, Header, Icon, Message, Segment, Form, Dimmer, Loader } from 'semantic-ui-react';
 import MySelectInput from '../../common/form/MySelectInput';
 import MyTextInput from '../../common/form/MyTextInput';
 import MyTextArea from '../../common/form/MyTextArea';
@@ -70,9 +70,15 @@ export default observer(function ServiceForm() {
 
     function handleFormSubmit(service: any) {
         if (service.id) {
-            updateService(service).then(() => navigate('/services'));
+            updateService(service,
+                clientsNamesOptions.find(c => c.value === service.clientId)?.text!,
+                carsNamesOptions.find(c => c.value === service.carId)?.text!
+            ).then(() => navigate('/services'));
         } else {
-            createService(service).then(() => navigate('/services'));
+            createService(service,
+                clientsNamesOptions.find(c => c.value === service.clientId)?.text!,
+                carsNamesOptions.find(c => c.value === service.carId)?.text!
+            ).then(() => navigate('/services'));
         }
     }
 
@@ -148,7 +154,11 @@ export default observer(function ServiceForm() {
                                         <Button floated='right' content='Create new' color='black' type='button' disabled={!values.clientId} fluid
                                             onClick={() => {
                                                 carStore.initFormCar(values.clientId);
-                                                modalStore.openModal(<CarForm disableClient={true} extraSubmitFuncion={() => readClient(service.clientId, false)} />);
+                                                modalStore.openModal(<CarForm disableClient={true}
+                                                    extraSubmitFuncion={(id: string) => {
+                                                        readClient(service.clientId, false);
+                                                        setService({ ...service, carId: id });
+                                                    }} />);
                                             }}
                                         />
                                     </Grid.Column>

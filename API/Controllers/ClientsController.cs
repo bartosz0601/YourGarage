@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class ClientsController : BaseApiController
     {
         private readonly DataContext _context;
@@ -31,12 +32,14 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new ListBasic.Query { }));
         }
 
+
         [HttpGet("amount")]
         public async Task<IActionResult> GetAmount()
         {
             return HandleResult(await Mediator.Send(new Amount.Query { }));
         }
 
+        [Authorize(Policy = "UserOwner")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -49,6 +52,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Create.Command { Client = client }));
         }
 
+        [Authorize(Policy = "UserOwner")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(Guid id, [FromBody] Client client)
         {
@@ -56,6 +60,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command { Client = client }));
         }
 
+        [Authorize(Policy = "UserOwner")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

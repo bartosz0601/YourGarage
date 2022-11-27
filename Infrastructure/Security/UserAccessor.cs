@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using System.Security.Claims;
 
 namespace Infrastructure.Security

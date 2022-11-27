@@ -20,7 +20,7 @@ export default observer(function CarsPage() {
 
     useEffect(() => {
         if (cars.length < 1) loadCars();
-    }, [loadCars])
+    }, [loadCars, cars.length])
 
     const [searchLocal, setSearchLocal] = useState(searchParam);
     const [loadingNext, setLoadingNext] = useState<boolean>();
