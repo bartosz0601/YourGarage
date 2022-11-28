@@ -14,20 +14,22 @@ const sleep = (delay: number) => {
     })
 }
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_ULR;//'http://localhost:5000/api';
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-
-axios.interceptors.request.use(config => { 
+axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
     const bearerToken = 'Bearer ' + token;
     if (token) config.headers!.Authorization = bearerToken;
-    return config; 
+    return config;
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep(1000);
+    
+    if (process.env.NODE_ENV === 'development') {
+        await sleep(1000);
+    }
 
     //Dodatnie informacji o pagination w odpowiedzi z serwera
     const pagination = response.headers['pagination'];
@@ -68,7 +70,7 @@ axios.interceptors.response.use(async response => {
             break;
         case 404:
             toast.error('not found');
-            window.location.replace('http://localhost:3000/not-found'); // przeładowuje całą strone 
+            window.location.replace(process.env.REACT_APP_API_ULR!);//('http://localhost:3000/not-found'); // przeładowuje całą strone 
             break;
         case 500:
             toast.error('server error');
@@ -122,7 +124,7 @@ const Account = {
 const agent = {
     Services,
     Clients,
-    Cars, 
+    Cars,
     Account
 }
 

@@ -1,10 +1,5 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence
 {
@@ -12,18 +7,12 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            var user = new AppUser();
+
             if (!userManager.Users.Any())
             {
-                var users = new List<AppUser>
-                {
-                    new AppUser{UserName = "Bartosz", Email="bartosz@bartosz.pl"  },
-                    new AppUser{UserName = "Celina", Email="celina@celina.pl"  },
-                    new AppUser{UserName = "Damian", Email="damian@damian.pl"  },
-                };
-                foreach (var user in users)
-                {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
-                }
+                user = new AppUser { UserName = "bartosz", Email = "bartosz@test.pl" };
+                await userManager.CreateAsync(user, "Pa$$w0rd");
             }
 
             if (!context.Clients.Any())
@@ -113,8 +102,10 @@ namespace Persistence
 
                 var clients = new List<Client>
                 {
+
                     new Client
                     {
+                        AppUser = user, 
                         FirstName = "Adam",
                         LastName = "Nowak",
                         Email = "adam@test.com",
@@ -125,6 +116,7 @@ namespace Persistence
 
                     new Client
                     {
+                        AppUser = user,
                         FirstName = "Ewa",
                         LastName = "Kowalska",
                         Email = "ewa@test.com",
@@ -135,6 +127,7 @@ namespace Persistence
 
                     new Client
                     {
+                        AppUser = user,
                         FirstName = "Jan",
                         LastName = "Janek",
                         Email = "jan@test.com",

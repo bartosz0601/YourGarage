@@ -122,7 +122,7 @@ export default class ServiceStore {
             })
             this.setLoadingInitial(false);
             return result;
-        } catch (error) {
+        } catch (error) {blank
             console.log(error);
             this.setLoadingInitial(false);
         }

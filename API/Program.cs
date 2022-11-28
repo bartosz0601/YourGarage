@@ -22,8 +22,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(opt =>
-{ 
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+{
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddCors(opt => 
@@ -69,14 +69,23 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+//app.MapControllers();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapFallbackToController("index", "Fallback");
+});
+    
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var userManager = services.GetRequiredService<UserManager<AppUser>>();
