@@ -9,9 +9,8 @@ import ClientCard from '../clients/ClientCard';
 
 export default observer(function CarDetails() {
     const { carStore } = useStore();
-    const { loadCar, car, loadingInitial } = carStore
+    const { loadCar, car, loadingInitial } = carStore;
     const { id } = useParams();
-
     useEffect(() => {
         loadCar(id!);
     }, [id])
