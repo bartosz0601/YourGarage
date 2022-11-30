@@ -1,4 +1,4 @@
-# fly.toml file generated for yourgarage on 2022-11-29T22:24:55+01:00
+# fly.toml file generated for yourgarage on 2022-11-30T02:33:38+01:00
 
 app = "yourgarage"
 kill_signal = "SIGINT"
@@ -9,7 +9,7 @@ processes = []
   image = "bartosz0601/yourgarage:latest"
 
 [env]
-ASPNETCORE_URLS="http://+:8080"
+  ASPNETCORE_URLS = "http://+:8080"
 
 [experimental]
   allowed_public_ports = []

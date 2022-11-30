@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Application.Interfaces;
 using Infrastructure.Security;
+using Microsoft.Extensions.Options;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +24,40 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(opt =>
-{
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+{ 
+    var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+    string connStr;
+
+    // Depending on if in development or production, use either Heroku-provided
+    // connection string, or development connection string from env var.
+    if (env == "Development")
+    {
+        // Use connection string from file.
+        connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+    }
+    else
+    {
+        // Use connection string provided at runtime by Heroku.
+        var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+        // Parse connection URL to connection string for Npgsql
+        connUrl = connUrl.Replace("postgres://", string.Empty);
+        var pgUserPass = connUrl.Split("@")[0];
+        var pgHostPortDb = connUrl.Split("@")[1];
+        var pgHostPort = pgHostPortDb.Split("/")[0];
+        var pgDb = pgHostPortDb.Split("/")[1];
+        var pgUser = pgUserPass.Split(":")[0];
+        var pgPass = pgUserPass.Split(":")[1];
+        var pgHost = pgHostPort.Split(":")[0];
+        var pgPort = pgHostPort.Split(":")[1];
+
+        connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb}; SSL Mode=Require; Trust Server Certificate=true";
+    }
+
+    // Whether the connection string came from the local development configuration file
+    // or from the environment variable from Heroku, use it to set up your DbContext.
+    opt.UseNpgsql(connStr);
 });
 
 builder.Services.AddCors(opt => 
@@ -94,7 +128,7 @@ try
 {
     var context = services.GetRequiredService<DataContext>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context, userManager);
+    //await Seed.SeedData(context, userManager);
 }
 catch (Exception ex)
 {
