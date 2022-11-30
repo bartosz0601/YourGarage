@@ -2,7 +2,7 @@
 Web + ASP.NET
 
 ## General info
-Web application for managing car workshop. Enable users to craete, clients, cars and services - ensura access to historical data. 
+Web application for managing car workshop. Enable users to create clients, cars and services - ensura access to historical data. 
 
 ## Technologies
 Project is created with:
