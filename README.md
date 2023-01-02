@@ -3,7 +3,8 @@ Web + ASP.NET
 
 ## General info
 Web application for managing car workshop. Enable users to create clients, cars and services - ensure access to historical data. <br />
-Demo <br />
+<br />
+<b>Demo</b> <br />
 website: https://yourgarage.fly.dev <br />
 user: test <br />
 password: Pa$$w0rd <br />
