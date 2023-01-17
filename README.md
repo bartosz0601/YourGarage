@@ -9,6 +9,19 @@ website: https://yourgarage.fly.dev <br />
 user: test <br />
 password: Pa$$w0rd <br />
 
+## Setup
+To run API project(server):
+```
+$ cd ..\yourgarage\api
+$ dotnet run
+```
+To run clientapp(webapp):
+```
+$ cd ..\yourgarage\clientapp
+$ npm install
+$ npm start
+```
+
 ## Technologies
 Project is created with:
 * ASP.NET Core 6.0
